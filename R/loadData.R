@@ -23,11 +23,11 @@ names(pData)[2:3] = c("id", "XVal")
 
 library(googleVis)
 chartData <- gvisMotionChart(pData, idvar="id", timevar="time")
-h1 = chartData$html
-htmlstring <- paste(h1, collapse = "\n")
-cat(htmlstring, file="index.html")
-#cat(chartData$html, file="index.html")
-#cat(chartData$html$chart, file="char.html")
+plot(chartData)
+#h1 = chartData$html
+#htmlstring <- paste(h1, collapse = "\n")
+#cat(htmlstring, file="index.html")
+
 
 
 
