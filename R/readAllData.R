@@ -25,7 +25,7 @@ readAllData = function(letter) {
   data = data.frame()
   for (i in 1:length(fileNames)) {
     aux = readData(fileNames[i])
-    aux$target <- data.matrix(aux$target) * i
+    aux$target <- as.numeric(aux$target) * i
     if (i == 1) {
       data = aux
       print(nrow(data))
