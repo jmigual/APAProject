@@ -11,8 +11,11 @@ readData = function(filePath){
   data = read.csv(paste0(folderPath, dataName), sep=" ", header = TRUE)
   targetData = read.csv(paste0(folderPath, targetName), sep=" ", header = FALSE)
   
-  targetFactors = as.factor(unlist(targetData[[1]]))
-  data$target = targetFactors
+  expression = sub("^[ab]_", "", sub("_datapoints.txt", "", dataName))
+  data$target = lapply(unlist(targetData), function(x) {
+    if (x > 0) return(expression)
+    else return(as.character(x))
+  })
   
   # Remove the time column
   return(data[, !names(data) %in% c("X0.0")])
@@ -25,7 +28,6 @@ readAllData = function(letter) {
   data = data.frame()
   for (i in 1:length(fileNames)) {
     aux = readData(fileNames[i])
-    aux$target <- as.numeric(aux$target) * i
     if (i == 1) {
       data = aux
       print(nrow(data))
@@ -34,6 +36,7 @@ readAllData = function(letter) {
       print(nrow(data))
     }
   }
+  data$target = as.factor(unlist(data$target))
   return(data)
 }
 
