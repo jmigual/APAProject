@@ -16,6 +16,7 @@ readData = function(filePath, single = TRUE){
   
   data = read.csv(paste0(folderPath, dataName), sep=" ", header = TRUE, colClasses = "numeric")
   data$target = unlist(read.csv(paste0(folderPath, targetName), sep=" ", header = FALSE))
+  data[1:300] = apply(data[1:300], 2, normalize)
   if (!single) {
     expression = sub("^[ab]_", "", sub("_datapoints.txt", "", dataName))
     data$target = lapply(unlist(data$target), function(x) {
@@ -24,9 +25,8 @@ readData = function(filePath, single = TRUE){
     })
   }
   
-  data = apply(data[, !names(data) %in% c("X0.0")], 2, normalize)
-  
   # Remove the time column
+  data = data[, !names(data) %in% c("X0.0")]
   return(data)
 }
 
