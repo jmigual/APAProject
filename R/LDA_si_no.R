@@ -30,4 +30,4 @@ checkError(pred.train$class, data.train$target, "training")
 
 # Visualitzacio de l'error de testing
 pred.valid = predict(lda.res, newdata = data.valid)
-checkError(pred.test$class, data.valid$target, "validacio")
+checkError(pred.valid$class, data.valid$target, "validacio")
