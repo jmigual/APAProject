@@ -4,7 +4,7 @@ library(MASS)
 source("./R/readAllData.R")
 
 checkError = function(predicted, real, type) {
-  tab = table(factor(predicted, levels=0:1), real)
+  tab = table(factor(predicted, levels(real)), real)
   print(paste("Error", type))
   print(tab)
   
