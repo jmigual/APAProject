@@ -4,8 +4,7 @@ source("./R/readAllData.R")
 
 # Aquest script realitza regressio logistica amb les dades obtingudes per a una sola expressio facial amb dos conjunts de dades,
 # Per entrenar es pot utilitzar la persona A i per provar les dades, la persona B
-
-checkValue = function(x) {
+probValue = function(x) {
   if (x > 0) return(1)
   else return(0)
 }
@@ -24,12 +23,12 @@ trainAndError = function(data.train, data.test, family = quasibinomial, maxit = 
   glm.res = glm(target ~ ., data.train, family = family, control = list(maxit = maxit))
   
   # Obtenir el % d'error amb el conjunt de training
-  prob.train = exp(predict(glm.res, newdata = data.train))
-  checkError(prob.train, data.train[,301], "training")
+  prob.train = predict(glm.res, newdata = data.train)
+  checkError(lapply(prob.train, probValue), data.train[,301], "training")
   
   # Obtenir el % d'error amb el conjunt de testing
-  prob.test = exp(predict(glm.res, newdata = data.test)) 
-  checkError(prob.test, data.test[,301], "testing")
+  prob.test = predict(glm.res, newdata = data.test)
+  checkError(lapply(prob.test, probValue), data.test[,301], "testing")
 }
 
 #######################

@@ -1,5 +1,11 @@
 rm(list=ls())
 
+normalize = function(x) {
+  data.min = min(x)
+  data.max = max(x)
+  return((x - data.min)/(data.max - data.min))
+}
+
 readData = function(filePath, single = TRUE){
   print(filePath)
   fileName = basename(filePath)
@@ -18,8 +24,10 @@ readData = function(filePath, single = TRUE){
     })
   }
   
+  data = apply(data[, !names(data) %in% c("X0.0")], 2, normalize)
+  
   # Remove the time column
-  return(data[, !names(data) %in% c("X0.0")])
+  return(data)
 }
 
 readAllData = function(letter, single = FALSE) {
