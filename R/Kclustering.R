@@ -40,23 +40,24 @@ readAllData = function(letter, single = FALSE) {
 
 dataA = readAllData("a")
 dataB = readAllData("b")
-############
+############ LDA
 
-
+####Generem el model
 lda.model <- lda (dataA$target ~ . , dataA)
 
 lda.model
 
-plot(lda.model)
-
+#### cros validation
 ldap.predcv <- update(lda.model,CV=TRUE)
 head(ldap.predcv$posterior)
 print(table(dataA$target,ldap.predcv$class))
 
-z <- lda(Sp ~ ., Iris, prior = c(1,1,1)/3, subset = train)
-predb <- predict(dataB, lda.model)$class
 
-############
+#### amb les dades del B
+ldap.predb <- predict(lda.model, newdata = dataB)
+print(table(dataB$target,ldap.predb$class))
+
+############ QDA
 
 qda.model <- qda (dataA$target ~ ., dataA)
 
@@ -67,8 +68,10 @@ table(dataA$target, qdap.pred$class)
 
 
 qdap.predcv <- update(qda.model,CV=TRUE)
-
-head(qdap.predcv$posterior)
 table(dataA$target, qdap.predcv$class)
 
+
+#### amb les dades del B
+qdap.predb <- predict(qda.model, newdata = dataB)
+print(table(dataB$target,qdap.predb$class))
 #############
