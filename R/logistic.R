@@ -10,7 +10,7 @@ readData = function(name){
   fileName = basename(filePath)
   folderPath = sub(fileName, "", filePath)
   
-  dataName = sub("_target", "_datapoints", fileName)
+  dataName = sub("_targets", "_datapoints", fileName)
   targetName = sub("_datapoints", "_targets", fileName)
   
   data = read.csv(paste0(folderPath, dataName), sep=" ", header = TRUE)
@@ -28,22 +28,30 @@ checkValue = function(x) {
   else return(0)
 }
 
-trainAndError = function(data, dataT, family = quasibinomial, maxit = 50) {
-  # La columna target es la que es vol obtenir per regressio logistica
-  glm.res = glm(target ~ ., data, family = family, control = list(maxit = maxit))
+checkError = function(predicted, real, type) {
+  tab = table(predicted, real)
+  print(paste("Error", type))
+  print(tab)
   
-  # Check the training error
-  probability = exp(predict(glm.res, dataT))
-  
-  # Obtenir els factors
-  value = as.factor(sapply(probability, checkValue))
-  
-  # Obtenir el % d'error
-  table = table(value, dataT[,301])
-  print(table)
-  
-  error = 100 - (sum(diag(table)))/length(value) * 100
+  error = 100 - (sum(diag(tab)))/length(predicted) * 100
   print(error)
+}
+
+trainAndError = function(data.train, data.test, family = quasibinomial, maxit = 50) {
+  # La columna target es la que es vol obtenir per regressio logistica
+  glm.res = glm(target ~ ., data.train, family = family, control = list(maxit = maxit))
+  
+  prob.train = exp(predict(glm.res, data.train))
+  val.train = as.factor(sapply(prob.train, checkValue))
+  
+  # Obtenir el % d'error amb el conjunt de training
+  checkError(val.train, data[,301], "training")
+  
+  prob.test = exp(predict(glm.res, data.test))
+  val.test = as.factor(sapply(prob.test, checkValue))
+  
+  # Obtenir el % d'error amb el conjunt de testing
+  checkError(val.test, dataT[,301], "testing")
 }
 
 # Llegir les dades training
