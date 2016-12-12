@@ -4,7 +4,7 @@ library(MASS)
 source("./R/readAllData.R")
 
 checkError = function(predicted, real, type) {
-  tab = table(factor(predicted, levels=0:1), real)
+  tab = table(predicted, real)
   print(paste("Error", type))
   print(tab)
   
@@ -38,3 +38,4 @@ checkError(pred.cv$class, dataA$target, "cross")
 # Visualitzacio de l'error de testing
 pred.valid = predict(qda.model, newdata = dataB)
 checkError(pred.valid$class, dataB$target, "validacio")
+
