@@ -12,7 +12,7 @@ readData = function(filePath, single = TRUE){
   data$target = unlist(read.csv(paste0(folderPath, targetName), sep=" ", header = FALSE))
   if (!single) {
     expression = sub("^[ab]_", "", sub("_datapoints.txt", "", dataName))
-    data$target = lapply(unlist(targetData), function(x) {
+    data$target = lapply(unlist(data$target), function(x) {
       if (x > 0) return(expression)
       else return(as.character(x))
     })

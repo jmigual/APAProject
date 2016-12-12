@@ -1,6 +1,5 @@
 # Elmininar totes les dades anteriors
 rm(list=ls())
-library(MASS)
 source("./R/readAllData.R")
 
 # Aquest script realitza regressio logistica amb les dades obtingudes per a una sola expressio facial amb dos conjunts de dades,
@@ -33,6 +32,9 @@ trainAndError = function(data.train, data.test, family = quasibinomial, maxit = 
   checkError(prob.test, data.test[,301], "testing")
 }
 
+#######################
+# INICI DE L'EXECUCIO #
+#######################
 # Llegir les dades training
 data.train = readAllData("a", single = TRUE)
 
