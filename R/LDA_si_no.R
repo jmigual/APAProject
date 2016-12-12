@@ -20,7 +20,7 @@ checkError = function(predicted, real, type) {
 data.train = readAllData("a", single = TRUE)
 
 # Llegir les dades de testing
-data.test = readAllData("b", single = TRUE)
+data.valid = readAllData("b", single = TRUE)
 
 lda.res = lda(target ~ ., data = data.train)
 
@@ -29,5 +29,5 @@ pred.train = predict(lda.res)
 checkError(pred.train$class, data.train$target, "training")
 
 # Visualitzacio de l'error de testing
-pred.test = predict(lda.res, newdata = data.test)
-checkError(pred.test$class, data.test$target, "testing")
+pred.valid = predict(lda.res, newdata = data.valid)
+checkError(pred.test$class, data.valid$target, "validacio")

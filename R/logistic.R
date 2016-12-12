@@ -18,7 +18,7 @@ checkError = function(predicted, real, type) {
   print(error)
 }
 
-trainAndError = function(data.train, data.test, family = quasibinomial, maxit = 50) {
+trainAndError = function(data.train, data.valid, family = quasibinomial, maxit = 50) {
   # La columna target es la que es vol obtenir per regressio logistica
   glm.res = glm(target ~ ., data.train, family = family, control = list(maxit = maxit))
   
@@ -26,9 +26,9 @@ trainAndError = function(data.train, data.test, family = quasibinomial, maxit = 
   prob.train = predict(glm.res, newdata = data.train)
   checkError(lapply(prob.train, probValue), data.train[,301], "training")
   
-  # Obtenir el % d'error amb el conjunt de testing
-  prob.test = predict(glm.res, newdata = data.test)
-  checkError(lapply(prob.test, probValue), data.test[,301], "testing")
+  # Obtenir el % d'error amb el conjunt de validacio
+  prob.valid = predict(glm.res, newdata = data.valid)
+  checkError(lapply(prob.valid, probValue), data.valid[,301], "validacio")
 }
 
 #######################
@@ -38,8 +38,8 @@ trainAndError = function(data.train, data.test, family = quasibinomial, maxit = 
 data.train = readAllData("a", single = TRUE)
 
 # Llegir dades testing
-data.test = readAllData("b", single = TRUE)
+data.valid = readAllData("b", single = TRUE)
 
 
 # Regressio utilitzant un model binomial
-trainAndError(data.train, data.test, "quasibinomial")
+trainAndError(data.train, data.valid, "quasibinomial")
