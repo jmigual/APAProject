@@ -25,7 +25,7 @@ data.train = readAllData("a", single = TRUE)
 # Llegir les dades de testing
 data.valid = readAllData("b", single = TRUE)
 
-model.nnet = nnet(target ~ ., data = data.train, size = 15, decay = 0.01, maxit = 200, MaxNWts = 10000)
+model.nnet = nnet(target ~ ., data = data.train, size = 300, decay = 0.1, maxit = 200, MaxNWts = 100000)
 
 train.pred = predict(model.nnet, type = "class")
 checkError(train.pred, data.train$target, "train")
@@ -38,5 +38,11 @@ trc <- trainControl (method="repeatedcv", number=10, repeats=10)
 
 cl = makeCluster(detectCores())
 registerDoParallel(cl)
+
+# Best option is size = 5, decay = 0.1
 model.train = train (target ~., data = data.train, method='nnet', maxit = 200, trControl=trc, MaxNWts = 10000)
+
+train.car.pred = predict(model.train)
+checkError(train.car.pred, data.train$target, "train 2")
+
 stopCluster(cl)
