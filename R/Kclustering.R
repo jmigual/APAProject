@@ -78,22 +78,22 @@ print(table(dataB$target,qdap.predb$class))
 
 ############ SVM Linear
 library(e1071)
-(svm.model <- svm(target ~ .,dat = dataA, type="C-classification", kernel="linear"))
+(svm.model <- svm(target ~ .,data = dataA, type="C-classification", kernel="linear"))
 svmp.pred <- predict(svm.model)
-table(dataA$target, svmp.pred$class)
+table(dataA$target, svmp.pred)
 
 
 #### amb les dades del B
-qdap.predb <- predict(qda.model, newdata = dataB)
-print(table(dataB$target,qdap.predb$class))
+svmp.predb <- predict(svm.model, newdata = dataB)
+print(table(dataB$target,svmp.predb))
 
 ############ SVM RBF
 library(e1071)
-(svm.model <- svm(target ~ .,dat = dataA, type="C-classification", kernel="radia"))
+(svm.model <- svm(target ~ .,data = dataA, type="C-classification", kernel="radia"))
 svmp.pred <- predict(svm.model)
-table(dataA$target, svmp.pred$class)
+table(dataA$target, svmp.pred)
 
 
 #### amb les dades del B
 svm.predb <- predict(svm.model, newdata = dataB)
-print(table(dataB$target,svm.predb$class))
+print(table(dataB$target,svm.predb))
