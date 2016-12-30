@@ -40,9 +40,12 @@ cl = makeCluster(detectCores())
 registerDoParallel(cl)
 
 # Best option is size = 5, decay = 0.1
-model.train = train (target ~., data = data.train, method='nnet', maxit = 200, trControl=trc, MaxNWts = 10000)
+model.train = train (target ~., data = data.train, method='nnet', maxit = 200, trControl=trc, MaxNWts = 10000,
+                     tuneGrid = expand.grid(.size=seq(3,15,by = 2),.decay=c(0, 0.01, 0.1)))
 
 train.car.pred = predict(model.train)
 checkError(train.car.pred, data.train$target, "train 2")
+
+print(model.train$bestTune)
 
 stopCluster(cl)
