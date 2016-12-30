@@ -25,7 +25,7 @@ data.train = readAllData("a", single = FALSE)
 # Llegir les dades de testing
 data.valid = readAllData("b", single = FALSE)
 
-model.nnet = nnet(target ~ ., data = data.train, size = 10, decay = 0.1, maxit = 200, MaxNWts = 100000)
+model.nnet = nnet(target ~ ., data = data.train, size = 5, decay = 0.1, maxit = 500, MaxNWts = 100000)
 
 train.pred = predict(model.nnet, type = "class")
 checkError(train.pred, data.train$target, "train")
