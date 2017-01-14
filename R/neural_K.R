@@ -20,32 +20,32 @@ checkError = function(predicted, real, type) {
 #######################
 
 # Llegir les dades de training
-data.train = readAllData("a", single = FALSE)
+data.a = readAllData("a", single = FALSE)
+data.b = readAllData("b", single = FALSE)
+allData = rbind(data.a, data.b)
 
-# Llegir les dades de testing
-data.valid = readAllData("b", single = FALSE)
-
-model.nnet = nnet(target ~ ., data = data.train, size = 5, decay = 0.1, maxit = 500, MaxNWts = 100000)
-
-train.pred = predict(model.nnet, type = "class")
-checkError(train.pred, data.train$target, "train")
-
-valid.pred = predict(model.nnet, newdata = data.valid, type = "class")
-checkError(valid.pred, data.valid$target, "validation")
+# Per comprovar les dades s'usará K-Cross Validation
 
 
-trc <- trainControl (method="cv", number=10, repeats=10)
+trc <- trainControl (method="cv", number=10, repeats=2)
 
 cl = makeCluster(detectCores())
 registerDoParallel(cl)
 
 # Best option is size = 5, decay = 0.1
-model.train = train (target ~., data = data.train, method='nnet', maxit = 200, trControl=trc, MaxNWts = 10000,
+model.train = train (target ~., data = allData, method='nnet', maxit = 200, trControl=trc, MaxNWts = 10000,
                      tuneGrid = expand.grid(.size=seq(3,15,by = 2),.decay=c(0, 0.01, 0.1)))
 
 train.car.pred = predict(model.train)
-checkError(train.car.pred, data.train$target, "train 2")
+checkError(train.car.pred, allData$target, "Train result")
 
 print(model.train$bestTune)
+
+# Un cop obinguts els paràmetres mitjançant el train ja només cal entrenar la xarxa neuronal
+# que té els millors paràmetres.
+model.nnet = nnet(target ~ ., data = data.train, size = 5, decay = 0.1, maxit = 500, MaxNWts = 100000)
+
+train.pred = predict(model.nnet, type = "class")
+checkError(train.pred, allData$target, "train")
 
 stopCluster(cl)

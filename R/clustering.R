@@ -1,5 +1,6 @@
 rm(list=ls())
 library(MASS)
+source("./R/readAllData.R")
 
 plotPosNeg <- function(posX, negX, posY, negY, ...) {
   X = c(posX, negX)
@@ -10,13 +11,15 @@ plotPosNeg <- function(posX, negX, posY, negY, ...) {
   points(negX - meanX, negY - meanY, col='red')
 }
 
-data = read.csv(choose.files(caption="Selecciona dades", multi=FALSE), sep=" ", header = TRUE)
-data$target = read.csv(choose.files(caption="Selecciona resposta", multi=FALSE), sep=" ", header = FALSE)
+# data = read.csv(choose.files(caption="Selecciona dades", multi=FALSE), sep=" ", header = TRUE)
+# data$target = read.csv(choose.files(caption="Selecciona resposta", multi=FALSE), sep=" ", header = FALSE)
+
+data = readData(file.choose(), single = TRUE)
 
 # Punt a ser projectat
-point = 60
+point = 1
 
-columns = 2 + (point*3):(point*3 + 2)
+columns = (point*3):(point*3 + 2)
 pData = data[columns]
 pData$target = data$target
 
