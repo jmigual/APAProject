@@ -33,16 +33,19 @@ library(doParallel)
 cl = makeCluster(detectCores())
 registerDoParallel(cl)
 
-(svm.model <- svm(target ~ .,data = allData, type="C-classification", kernel="linear", cross=2))
+(svm.model <- svm(target ~ .,data = allData, type="C-classification", kernel="linear", cross=4))
 
 stopCluster(cl)
 svmp.pred <- predict(svm.model)
-table(dataA$target, svmp.pred)
+table(allData$target, svmp.pred)
+checkError(svmp.pred,allData$target,"SVM")
 
 
 #### amb les dades del B
 svmp.predb <- predict(svm.model, newdata = dataB)
 print(table(dataB$target,svmp.predb))
+checkError(svmp.predb,dataB$target,"SVM")
+
 
 ############ SVM Linear
 library(e1071)
@@ -55,9 +58,27 @@ table(dataA$target, svmp.pred)
 svmp.predb <- predict(svm.model, newdata = dataB)
 print(table(dataB$target,svmp.predb))
 
+
+
+############ SVM RBF Cross
+library(e1071)
+cl = makeCluster(detectCores())
+registerDoParallel(cl)
+(svm.model <- svm(target ~ .,data = allData, type="C-classification", kernel="radial", cross=4))
+stopCluster(cl)
+svmp.pred <- predict(svm.model)
+table(allData$target, svmp.pred)
+checkError(svmp.predb,allData$target,"SVM")
+
+
+
+#### amb les dades del B
+svm.predb <- predict(svm.model, newdata = dataB)
+print(table(dataB$target,svm.predb))
+
 ############ SVM RBF
 library(e1071)
-(svm.model <- svm(target ~ .,data = dataA, type="C-classification", kernel="radia"))
+(svm.model <- svm(target ~ .,data = dataA, type="C-classification", kernel="radial"))
 svmp.pred <- predict(svm.model)
 table(dataA$target, svmp.pred)
 
