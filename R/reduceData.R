@@ -1,8 +1,10 @@
-rm(list = ls())
+#rm(list = ls())
 library(MASS)
 source("./R/readAllData.R")
 
 reduceData = function(data) {
+  print("Reducing")
+  
   result = data.frame(X0 = 1:nrow(data))
   for (i in seq(1, ncol(data) - 1, 3)) {
     myLDA = lda(data[i:(i+2)], unlist(data$target))

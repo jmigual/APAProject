@@ -1,4 +1,4 @@
-rm(list=ls())
+#rm(list=ls())
 
 normalize = function(x) {
   data.min = min(x)
@@ -41,5 +41,14 @@ readAllData = function(letter = "ab", single = FALSE) {
   }
   data$target = as.factor(unlist(data$target))
   return(data)
+}
+
+checkError = function(predicted, real, type) {
+  tab = table(factor(predicted, levels = levels(real)), real)
+  print(paste("Error", type))
+  print(tab)
+  
+  error = 100 - (sum(diag(tab)))/length(predicted) * 100
+  print(error)
 }
 
