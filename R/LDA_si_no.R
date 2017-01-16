@@ -2,6 +2,7 @@
 rm(list=ls())
 library(MASS)
 source("./R/readAllData.R")
+source("./R/reduceData.R")
 
 checkError = function(predicted, real, type) {
   tab = table(factor(predicted, levels=0:1), real)
@@ -16,11 +17,16 @@ checkError = function(predicted, real, type) {
 # INICI DE L'EXECUCIO #
 #######################
 
-# Llegir les dades de training
-data.train = readAllData("a", single = TRUE)
+allData = reduceData(readAllData(single = TRUE))
 
-# Llegir les dades de testing
-data.valid = readAllData("b", single = TRUE)
+# Donat que pel model nomes hi ha dues persones que aporten dades
+# es barregen totes les dades i s'agafen algunes aleatòries per 
+# entrenar el model, després es valida amb la resta de dades
+
+index.sample = sample(nrow(allData), nrow(allData)/4)
+data.train = allData[index.sample,]
+data.valid = allData[!1:nrow(allData) %in% index.sample,]
+
 
 lda.res = lda(target ~ ., data = data.train)
 
