@@ -4,15 +4,6 @@ library(MASS)
 source("./R/readAllData.R")
 source("./R/reduceData.R")
 
-checkError = function(predicted, real, type) {
-  tab = table(factor(predicted, levels=0:1), real)
-  print(paste("Error", type))
-  print(tab)
-  
-  error = 100 - (sum(diag(tab)))/length(predicted) * 100
-  print(error)
-}
-
 #######################
 # INICI DE L'EXECUCIO #
 #######################
