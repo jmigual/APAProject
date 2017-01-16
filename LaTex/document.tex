@@ -15,6 +15,7 @@
 \usepackage{longtable}
 \usepackage{multirow}
 \usepackage{array}
+\usepackage{multicol}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1em}
@@ -75,7 +76,7 @@ A continuació es mostren els resultats obtinguts amb el conjunt de dades \verb|
 
 Com es pot veure als gràfics anteriors la dada Z no permet agrupar les dades gaire bé ja que totes queden al voltant dels valors \verb|Z = 0|. Tot i així es pot veure en les dimensions $X$ i $Y$ la separació de les dades es relativament fàcil. 
 
-També, donat que sembla ser viable una projecció, es pot fer una projecció de cada punt de 3 dimensions a una sola dimensió.
+També, donat que sembla ser viable una projecció, es pot fer una projecció de cada punt de 3 dimensions a una sola dimensió. Això és el que s'ha fet a l'script \texttt{reduceData.R} de manera que cada punt és projectat a una sola dimensió reduint l'espai de dades de 300 dimensions a 100 dimensions. Tot i així hi ha una pèrdua d'informació al fer la projecció però s'ha considerat que aquesta pèrdua d'informació és poca en comparació al guany que s'obté al reduir les dimensions.
 
 \section{Resultats amb mètodes lineals/quadràtics}
 Donat que hi ha diversos objectius en aquest treball s'han usat diferents mètodes per a poder resoldre cadascun dels objectius, han estat els següents:
@@ -91,40 +92,11 @@ Donat que hi ha diversos objectius en aquest treball s'han usat diferents mètod
 	\end{itemize}
 \end{itemize}
 
-\subsection{Detecció d'expressió facial amb regressió logística}
-L'script \verb|logistic.R| realitza classificació amb regressió logística mitjançant l'ajuda de \verb|glm|. Per poder utilitzar l'script cal posar el \verb|Working Directory| a l'arrel de la carpeta subministrada i un cop es comença a executar cal escollir les dades que es volen usar per entrenar i les que es volen usar per validar.
+\subsection{Detecció d'expressió facial}
+\subsubsection{Regressió Logística}
+L'script \verb|logistic.R| realitza classificació amb regressió logística mitjançant l'ajuda de \verb|glm|. Per poder utilitzar l'script cal posar el \verb|Working Directory| a l'arrel de la carpeta subministrada i un cop es comença a executar cal escollir les dades que es volen usar per entrenar i les que es volen usar per validar. Inicialment s'havia decidit usar les dades dels arxius \verb|a_*.txt| per entrenar i les dels \verb|b_*.txt| per validar les dades tot i que això no aporta bons resultats. A continuació es pot comparar l'error entre utilitzar un sol conjunt per entrenar i usar un subconjunt de totes les dades.
 
-En el primer experiment s'ha usat una sola expressió facial (dades contingudes a \verb|a_affirmative_datapoints.txt| i a \verb|a_affirmative_targets.txt|) com a entrenament i, tot seguit, s'han validat els resultats amb la mateixa expressió facial però realitzada per una altra persona (dades contingudes a \verb|b_affirmative_datapoints.txt| i a \verb|b_affirmative_targets.txt|). A la \autoref{tab:reglog_training1} i la \autoref{tab:reglog_training2} es poden veure els resultats obtinguts.
-
-\begin{table}[H]
-	\centering
-	\def\arraystretch{1.5}
-	\begin{tabular}{c|rr}
-		& \multicolumn{2}{c}{Valor real} \\
-		Valor predit & 0 & 1 \\
-		\hline
-		0 & 648 & 0 \\
-		1 & 0 & 414 \\
-	\end{tabular}
-	\caption{Valors predits pel conjunt d'entrenament. L'error és d'un 0\%.}
-	\label{tab:reglog_training1}
-\end{table}
-
-\begin{table}[H]
-	\centering
-	\def\arraystretch{1.5}
-	\begin{tabular}{c|rr}
-		& \multicolumn{2}{c}{Valor real} \\
-		Valor predit & 0 & 1 \\
-		\hline
-		0 & 159 & 341 \\
-		1 & 387 & 187 \\
-	\end{tabular}
-	\caption{Valors predits pel conjunt de validació. L'error és d'un 67,78\%.}
-	\label{tab:reglog_training2}
-\end{table}
-
-En el segon experiment s'han usat totes les expressions facials d'una persona (dades contingudes a tots els arxius \verb|a_*.txt|) per a l'entrenament i per a la validació s'han usat totes les dades de l'altre persona (dades contingudes a tots els arxius \verb|b_*.txt|). Es poden veure els resultats a la \autoref{tab:reglog_training3} i la \autoref{tab:reglog_training4}.
+En el primer experiment s'han usat totes les expressions facials d'una persona (dades contingudes a tots els arxius \verb|a_*.txt|) per a l'entrenament i per a la validació s'han usat totes les dades de l'altre persona (dades contingudes a tots els arxius \verb|b_*.txt|). Es poden veure els resultats a la \autoref{tab:reglog_training1} i la \autoref{tab:reglog_training2}.
 
 \begin{table}[H]
 	\centering
@@ -137,7 +109,7 @@ En el segon experiment s'han usat totes les expressions facials d'una persona (d
 		1 & 242 & 4095 \\
 	\end{tabular}
 	\caption{Valors predits pel conjunt d'entrenament. L'error és d'un 4,43\%.}
-	\label{tab:reglog_training3}
+	\label{tab:reglog_training1}
 \end{table}
 
 \begin{table}[H]
@@ -151,43 +123,43 @@ En el segon experiment s'han usat totes les expressions facials d'una persona (d
 		1 & 3180 & 2459 \\
 	\end{tabular}
 	\caption{Valors predits pel conjunt de validació. L'error és d'un 42,87\%.}
+	\label{tab:reglog_training2}
+\end{table}
+
+En aquest segon experiment s'ha usat un subconjunt de totes les dades per entrenar i el complementari d'aquest per validar les dades, com es pot observar a la \autoref{tab:reglog_training4} s'obtenen millors resultats per les dades de validació respecte \autoref{tab:reglog_training2}.
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.5}
+	\begin{tabular}{c|rr}
+		& \multicolumn{2}{c}{Valor real} \\
+		Valor predit & 0 & 1 \\
+		\hline
+		0 & 2306 & 543 \\
+		1 &  247 & 894 \\
+	\end{tabular}
+	\caption{Valors predits pel conjunt d'entrenament. L'error és d'un 19,8 \%.}
+	\label{tab:reglog_training3}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.5}
+	\begin{tabular}{c|rr}
+		& \multicolumn{2}{c}{Valor real} \\
+		Valor predit & 0 & 1 \\
+		\hline
+		0 & 13914 & 3147 \\
+		1 &  1592 & 5293 \\
+	\end{tabular}
+	\caption{Valors predits pel conjunt de validació. L'error és d'un 19,79 \%.}
 	\label{tab:reglog_training4}
 \end{table}
 
-\subsection{Detecció d'expressió facial amb LDA}
-L'script \verb|LDA_si_no.R| realitza classificació amb \emph{lda} mitjançant l'ajuda de \verb|lda|. Per poder utilitzar l'script cal posar el \verb|Working Directory| a l'arrel de la carpeta subministrada i un cop es comença a executar cal escollir les dades que es volen usar per entrenar i les que es volen usar per validar.
-
-En el primer experiment s'ha usat una sola expressió facial (dades contingudes a \verb|a_affirmative_datapoints.txt| i a \verb|a_affirmative_targets.txt|) com a entrenament i, tot seguit, s'han validat els resultats amb la mateixa expressió facial però realitzada per una altra persona (dades contingudes a \verb|b_affirmative_datapoints.txt| i a \verb|b_affirmative_targets.txt|). A la \autoref{tab:lda_yes_no1} i la \autoref{tab:lda_yes_no2} es poden veure els resultats obtinguts.
-
-\begin{table}[H]
-	\centering
-	\def\arraystretch{1.5}
-	\begin{tabular}{c|rr}
-		& \multicolumn{2}{c}{Valor real} \\
-		Valor predit & 0 & 1 \\
-		\hline
-		0 & 626 & 72 \\
-		1 & 22 & 342 \\
-	\end{tabular}
-	\caption{Valors predits pel conjunt d'entrenament. L'error és d'un 8,85\%.}
-	\label{tab:lda_yes_no1}
-\end{table}
-
-\begin{table}[H]
-	\centering
-	\def\arraystretch{1.5}
-	\begin{tabular}{c|rr}
-		& \multicolumn{2}{c}{Valor real} \\
-		Valor predit & 0 & 1 \\
-		\hline
-		0 & 182 & 267 \\
-		1 & 364 & 261 \\
-	\end{tabular}
-	\caption{Valors predits pel conjunt de validació. L'error és d'un 58,75\%.}
-	\label{tab:lda_yes_no2}
-\end{table}
-
-En el segon experiment s'han usat totes les expressions facials d'una persona (dades contingudes a tots els arxius \verb|a_*.txt|) per a l'entrenament i per a la validació s'han usat totes les dades de l'altre persona (dades contingudes a tots els arxius \verb|b_*.txt|). Es poden veure els resultats a la \autoref{tab:lda_yes_no3} i la 	\autoref{tab:lda_yes_no4}.
+\subsubsection{LDA}
+L'script \verb|LDA_si_no.R| realitza classificació amb \emph{lda} mitjançant l'ajuda de \verb|lda|. Per poder utilitzar l'script cal posar el \verb|Working Directory| a l'arrel de la carpeta subministrada i un cop es comença a executar cal escollir les dades que es volen usar. 
+ 
+En el primer experiment s'han usat totes les expressions facials d'una persona (dades contingudes a tots els arxius \verb|a_*.txt|) per a l'entrenament i per a la validació s'han usat totes les dades de l'altre persona (dades contingudes a tots els arxius \verb|b_*.txt|). Es poden veure els resultats a la \autoref{tab:lda_yes_no1} i la 	\autoref{tab:lda_yes_no2}.
 
 \begin{table}[H]
 	\centering
@@ -200,7 +172,7 @@ En el segon experiment s'han usat totes les expressions facials d'una persona (d
 		1 & 278 & 3997 \\
 	\end{tabular}
 	\caption{Valors predits pel conjunt d'entrenament. L'error és d'un 5,42\%.}
-	\label{tab:lda_yes_no3}
+	\label{tab:lda_yes_no1}
 \end{table}
 
 \begin{table}[H]
@@ -214,10 +186,41 @@ En el segon experiment s'han usat totes les expressions facials d'una persona (d
 		1 & 3887 & 3104 \\
 	\end{tabular}
 	\caption{Valors predits pel conjunt de validació. L'error és d'un 43,31\%.}
+	\label{tab:lda_yes_no2}
+\end{table}
+
+En aquest segon experiment s'ha usat un subconjunt de totes les dades per entrenar i el complementari d'aquest per validar les dades, com es pot observar a la \autoref{tab:lda_yes_no4} s'obtenen millors resultats per les dades de validació.
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.5}
+	\begin{tabular}{c|rr}
+		& \multicolumn{2}{c}{Valor real} \\
+		Valor predit & 0 & 1 \\
+		\hline
+		0 & 4088 & 1034 \\
+		1 &  414 & 1448 \\
+	\end{tabular}
+	\caption{Valors predits pel conjunt d'entrenament. L'error és d'un 20,73 \%.}
+	\label{tab:lda_yes_no3}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.5}
+	\begin{tabular}{c|rr}
+		& \multicolumn{2}{c}{Valor real} \\
+		Valor predit & 0 & 1 \\
+		\hline
+		0 & 12334 & 3036 \\
+		1 &  1223 & 4359 \\
+	\end{tabular}
+	\caption{Valors predits pel conjunt de validació. L'error és d'un 20,33 \%.}
 	\label{tab:lda_yes_no4}
 \end{table}
 
-\subsection{Detecció de tipus d'expressió amb LDA}
+\subsection{Detecció de tipus d'expressió}
+\subsubsection{LDA}
 
 L’script \verb|LDA_K.R|  obté un model LDA i a continuació testeja el model mitjançant cross-validation i aplicant-lo a un altre subjecte.
 
@@ -275,20 +278,22 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\includegraphics[width=\textwidth]{images/image01}
 \end{figure}
 
-\begin{enumerate}
-	\item None 
-	\item affirmative 
-	\item conditional 
-	\item doubt question 
-	\item emphasis 
-	\item negative 
-	\item relative 
-	\item topics 
-	\item wh question 
-	\item yn question
-\end{enumerate}
+\begin{multicols}{3}
+	\begin{enumerate}
+		\item None 
+		\item affirmative 
+		\item conditional 
+		\item doubt question 
+		\item emphasis 
+		\item negative 
+		\item relative 
+		\item topics 
+		\item wh question 
+		\item yn question
+	\end{enumerate}
+\end{multicols}
 
-\subsection{Detecció de tipus d'expressió amb QDA}
+\subsubsection{QDA}
 L’script \verb|QDA_K.R|  obté un model QDA i a continuació testeja el model mitjançant cross-validation i aplicant-lo a un altre subjecte.
 
 
