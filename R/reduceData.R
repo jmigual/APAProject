@@ -8,7 +8,7 @@ reduceData = function(data) {
     myLDA = lda(data[i:(i+2)], unlist(data$target))
     scale = myLDA$scaling
     projection = data[,i]*scale[1] + data[,i + 1]*scale[2] + data[,i + 2]*scale[3]
-    result = cbind(result, projection)
+    result = cbind(result, scale(projection))
   }
   result = cbind(result[2:ncol(result)], data[ncol(data)])
   colnames(result) = c(sapply(1:(ncol(result) - 1), function(x){paste0("x",x)}), "target")

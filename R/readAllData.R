@@ -16,7 +16,7 @@ readData = function(filePath, single = TRUE){
   
   data = read.csv(paste0(folderPath, dataName), sep=" ", header = TRUE, colClasses = "numeric")
   data$target = unlist(read.csv(paste0(folderPath, targetName), sep=" ", header = FALSE))
-  data[1:300] = apply(data[1:300], 2, normalize)
+  data[1:300] = apply(data[1:300], 2, scale)
   if (!single) {
     expression = sub("^[ab]_", "", sub("_datapoints.txt", "", dataName))
     data$target = lapply(unlist(data$target), function(x) {
@@ -30,9 +30,9 @@ readData = function(filePath, single = TRUE){
   return(data)
 }
 
-readAllData = function(letter, single = FALSE) {
+readAllData = function(letter = "ab", single = FALSE) {
   fileNames = choose.files(caption = "Selecciona les dades", multi=TRUE)
-  fileNames = grep(paste0(letter, "_.+_datapoints"), fileNames, value = TRUE)
+  fileNames = grep(paste0("[",letter, "]_.+_datapoints"), fileNames, value = TRUE)
   
   data = data.frame()
   for (i in 1:length(fileNames)) {
