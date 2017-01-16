@@ -62,9 +62,14 @@ print(table(dataB$target,svmp.predb))
 
 ############ SVM RBF Cross
 library(e1071)
+library(doParallel)
+library(caret)
 cl = makeCluster(detectCores())
 registerDoParallel(cl)
-(svm.model <- svm(target ~ .,data = allData, type="C-classification", kernel="radial", cross=4))
+#(svm.model <- svm(target ~ .,data = allData, type="C-classification", kernel="radial", cross=4))
+trc = trainControl(method="cv", number = 4, repeats = 1)
+train.model = train(target ~ ., data = allData, method="svmRadial", maxit = 200, trControl = trc,
+                    tuneGrid = expand.grid(C=c(0.1, 1, 10), sigma=c(0.5, 2, 10)))
 stopCluster(cl)
 svmp.pred <- predict(svm.model)
 table(allData$target, svmp.pred)
