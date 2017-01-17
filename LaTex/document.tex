@@ -257,7 +257,8 @@ En aquest segon experiment s'ha usat un subconjunt de totes les dades per entren
 \end{table}
 
 \subsection{Detecció de tipus d'expressió}
-\subsection{Tipus d'expressió}
+\subsubsection{Tipus d'expressió}
+\label{sec:tipus_expressio}
 \begin{multicols}{3}
 	\begin{enumerate}
 		\item None 
@@ -304,9 +305,35 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\caption{Resultats obtinguts a l'usar cross-validation. Error total 8\%.}
 \end{table}
 
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{images/image00}
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=1\textwidth, height=0.5\textwidth,
+				every axis plot post/.style={/pgf/number format/fixed},
+				ybar=5pt,
+				xtick = data,
+				axis x line = bottom,
+				axis y line = left,
+				bar width=12pt,
+				ymin = 0, ymax = 700,
+				enlarge x limits = 0.2,
+				restrict y to domain*=0:800,
+				visualization depends on=rawy\as\rawy, % Save the unclipped values
+				after end axis/.code={ % Draw line indicating break
+					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
+				},
+				nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
+				clip = false,
+				xticklabels from table = {data/lda_k_train.csv}{category},
+				x tick label style={rotate=45, anchor=east},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/lda_k_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
 \end{figure}
 
 \begin{table}[H]
@@ -329,12 +356,38 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 		10 & 1453 & 0 & 0 & 57 & 0 & 0 & 470 & 1 & 69 & 69\\
 		\hline
 	\end{tabular}
-	\caption{Resultats obtinguts al validar les dades amb una altra persona. Error total 95\%}
+\captionsetup{width=0.8\textwidth}
+	\caption{Resultats obtinguts al validar les dades amb una altra persona, error total 95\%. Les expressions es poden veure a la \autoref{sec:tipus_expressio}.}
 \end{table}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{images/image01}
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=1\textwidth, height=0.5\textwidth,
+				every axis plot post/.style={/pgf/number format/fixed},
+				ybar=5pt,
+				xtick = data,
+				axis x line = bottom,
+				axis y line = left,
+				bar width=12pt,
+				ymin = 0, ymax = 800,
+				enlarge x limits = 0.2,
+				restrict y to domain*=0:900,
+				visualization depends on=rawy\as\rawy, % Save the unclipped values
+				after end axis/.code={ % Draw line indicating break
+					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
+				},
+				nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
+				clip = false,
+				xticklabels from table = {data/lda_k_valid.csv}{category},
+				x tick label style={rotate=45, anchor=east},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_valid.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/lda_k_valid.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
 \end{figure}
 
 \subsubsection{QDA}
@@ -363,12 +416,38 @@ En comparació amb el LDA podem veure un error molt major alhora de predir les n
 		10 & 782 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 509 \\
 		\hline
 	\end{tabular}
-	\caption{Resultats obtinguts al validar les dades amb cross-validation. Error total 43\%}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Resultats obtinguts al validar les dades amb cross-validation, error total 43\%. Les expressions es poden veure a \autoref{sec:tipus_expressio}.}
 \end{table}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{images/image02}
+	\begin{tikzpicture}
+	\begin{axis}[
+	width=1\textwidth, height=0.5\textwidth,
+	every axis plot post/.style={/pgf/number format/fixed},
+	ybar=5pt,
+	xtick = data,
+	axis x line = bottom,
+	axis y line = left,
+	bar width=12pt,
+	ymin = 0, ymax = 3300,
+	enlarge x limits = 0.2,
+	restrict y to domain*=0:3600,
+	visualization depends on=rawy\as\rawy, % Save the unclipped values
+	after end axis/.code={ % Draw line indicating break
+		\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
+	},
+	nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
+	clip = false,
+	xticklabels from table = {data/qda_k_train.csv}{category},
+	x tick label style={rotate=45, anchor=east},
+	]
+	\addplot table[x expr=\coordindex, y=hit] {data/qda_k_train.csv};
+	\addplot table[x expr=\coordindex, y=miss] {data/qda_k_train.csv};
+	\legend{Hit, Miss}
+	\end{axis}
+	\end{tikzpicture}
 \end{figure}
 
 Quan s'utilitza un altre individu per validar les dades, totes es prediuen amb sortida \emph{None} per tant aquest model no ens permet extrapolar res tot hi tenir un error total menor (35\%). Es podria dir que el individu B es menys expressiu que l’individu A en aquest model ja que totes les seves expressions es categoritzen com a \emph{no expressió}.
@@ -515,11 +594,12 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\centering
 	\begin{tikzpicture}
 		\begin{axis}[
-				width=1\textwidth,
-				height=0.5\textwidth,
+				width=1\textwidth, height=0.5\textwidth,
 				every axis plot post/.style={/pgf/number format/fixed},
 				ybar=5pt,
 				xtick = data,
+				axis x line = bottom,
+				axis y line = left,
 				bar width=12pt,
 				ymin = 0, ymax = 200,
 				enlarge x limits = 0.2,
@@ -528,9 +608,7 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 				after end axis/.code={ % Draw line indicating break
 					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
 				},
-				nodes near coords={%
-					\pgfmathprintnumber{\rawy}% Print unclipped values
-				},
+				nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
 				clip = false,
 				xticklabels from table = {data/nnet_k_train.csv}{category},
 				x tick label style={rotate=45, anchor=east},
@@ -565,6 +643,36 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\caption{Resultats obtinguts amb les dades de validació. Error total 21,73\%}
 	\label{tab:nnet_k2}
 \end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+			width=1\textwidth, height=0.5\textwidth,
+			every axis plot post/.style={/pgf/number format/fixed},
+			ybar=5pt,
+			xtick = data,
+			axis x line = bottom,
+			axis y line = left,
+			bar width=12pt,
+			ymin = 0, ymax = 1550,
+			enlarge x limits = 0.2,
+			restrict y to domain*=0:1700,
+			visualization depends on=rawy\as\rawy, % Save the unclipped values
+			after end axis/.code={ % Draw line indicating break
+				\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
+			},
+			nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
+			clip = false,
+			xticklabels from table = {data/nnet_k_valid.csv}{category},
+			x tick label style={rotate=45, anchor=east},
+		]
+		\addplot table[x expr=\coordindex, y=hit] {data/nnet_k_valid.csv};
+		\addplot table[x expr=\coordindex, y=miss] {data/nnet_k_valid.csv};
+		\legend{Hit, Miss}
+	\end{axis}
+	\end{tikzpicture}
+\end{figure}
 
 \subsubsection{Màquines de Vectors Suport}
 
