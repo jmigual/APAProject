@@ -43,18 +43,18 @@ checkError(svmr.pred,smallData$target,"SVM small data")
 
 #### amb totes les dades
 svm.pred <- predict(svm.model, newdata = allData)
-print(table(dataB$target,svm.pred))
+print(table(data.b$target,svm.pred))
 checkError(svm.predb,allData$target,"SVM all data")
 
 #### amb les dades del B
-svm.predb <- predict(svm.model, newdata = dataB)
-print(table(dataB$target,svmp.predb))
-checkError(svm.predb,dataB$target,"SVM")
+svm.predb <- predict(svm.model, newdata = data.b)
+print(table(data.b$target,svmp.predb))
+checkError(svm.predb,data.b$target,"SVM")
 
 #### amb les dades del A
-svp.preda <- predict(svm.model, newdata = dataA)
-print(table(dataB$target,svmp.predb))
-checkError(svmp.preda,dataB$target,"SVM")
+svp.preda <- predict(svm.model, newdata = data.a)
+print(table(data.b$target,svmp.predb))
+checkError(svmp.preda,data.b$target,"SVM")
 
 
 ####### Linear
@@ -79,14 +79,14 @@ print(table(allData$target,svm.pred))
 checkError(svm.pred,allData$target,"SVM all data")
 
 #### amb les dades del B
-svm.predb <- predict(svm.model, newdata = dataB)
-print(table(dataB$target,svmp.predb))
-checkError(svm.predb,dataB$target,"SVM")
+svm.predb <- predict(svm.model, newdata = data.b)
+print(table(data.b$target,svmp.predb))
+checkError(svm.predb,data.b$target,"SVM")
 
 #### amb les dades del A
-svp.preda <- predict(svm.model, newdata = dataA)
-print(table(dataB$target,svmp.predb))
-checkError(svmp.preda,dataB$target,"SVM")
+svp.preda <- predict(svm.model, newdata = data.a)
+print(table(data.b$target,svmp.predb))
+checkError(svmp.preda,data.b$target,"SVM")
 
 
 
