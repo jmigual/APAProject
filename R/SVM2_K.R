@@ -75,8 +75,8 @@ checkError(svmr.pred,smallData$target,"SVM small data")
 
 #### amb totes les dades
 svm.pred <- predict(svm.model, newdata = allData)
-print(table(dataB$target,svm.pred))
-checkError(svm.predb,allData$target,"SVM all data")
+print(table(allData$target,svm.pred))
+checkError(svm.pred,allData$target,"SVM all data")
 
 #### amb les dades del B
 svm.predb <- predict(svm.model, newdata = dataB)
