@@ -23,7 +23,7 @@ data.valid = allData[!1:nrow(allData) %in% index.sample,]
 # Per comprovar les dades de la rutina train s'usará K-Cross Validation
 trc <- trainControl (method="cv", number=4, repeats=1)
 
-cl = makeCluster(detectCores())
+cl = makeCluster(detectCores() - 1)
 registerDoParallel(cl)
 
 # Best option is size = 19, decay = 0.1

@@ -5,6 +5,7 @@
 \usepackage[margin=2cm]{geometry}
 \usepackage{float}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \usepackage[hidelinks]{hyperref}
@@ -19,6 +20,8 @@
 \usepackage{titlesec}
 \usepackage{subcaption}
 \usepackage{colortbl}
+
+\usetikzlibrary{decorations.pathmorphing}
 
 
 \setlength{\parindent}{0pt}
@@ -228,11 +231,11 @@ En aquest segon experiment s'ha usat un subconjunt de totes les dades per entren
 			& \multicolumn{2}{c|}{Valor real} \\
 			Valor predit & 0 & 1 \\
 			\hline
-			0 & 4088 & 1034 \\
-			1 &  414 & 1448 \\
+			0 & 2410 & 564 \\
+			1 &  194 & 822 \\
 			\hline
 		\end{tabular}
-		\caption{Conjunt d'entrenament. L'error és d'un 20,73 \%.}
+		\caption{Conjunt d'entrenament. L'error és d'un 19 \%.}
 		\label{tab:lda_yes_no3}
 	\end{subtable}
 	\hfill
@@ -405,10 +408,44 @@ Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neu
 	\end{tabular}
 	\captionsetup{width=0.6\textwidth}
 	\caption{Valors retornats per la rutina \texttt{train()} indicant la precisió del model (més és millor) i els paràmetres \texttt{size} i \texttt{decay} usats.}
-	\label{tab:neuron_yes_no}
+	\label{tab:nnet_yes_no}
 \end{table}
 
-Com es pot observar a la \autoref{tab:neuron_yes_no} els millors paràmetres per a la xarxa neuronal són $size = 19$ i $decay = 0,1$. Amb aquests paràmetres s'obtenen els següents resultats.
+Com es pot observar a la \autoref{tab:nnet_yes_no} els millors paràmetres per a la xarxa neuronal són $size = 19$ i $decay = 0,1$. Amb aquests paràmetres s'obtenen els següents resultats.
+
+\begin{table}[H]
+	\def\arraystretch{1.5}
+	\begin{subtable}[t]{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|rr|}
+			\hline
+			& \multicolumn{2}{c|}{Valor real} \\
+			Valor predit & 0 & 1 \\
+			\hline
+			0 & 2577 & 57 \\
+			1 &   27 & 1329 \\
+			\hline
+		\end{tabular}
+		\caption{Conjunt d'entrenament. L'error és d'un 2,11 \%.}
+		\label{tab:nnet_yes_no1}
+	\end{subtable}
+	\hfill
+	\begin{subtable}[t]{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|rr|}
+			\hline
+			& \multicolumn{2}{c|}{Valor real} \\
+			Valor predit & 0 & 1 \\
+			\hline
+			0 & 13576 & 2078 \\
+			1 &  1879 & 6413 \\
+			\hline
+		\end{tabular}
+		\caption{Conjunt de validació. L'error és d'un 16,52 \%.}
+		\label{tab:nnet_yes_no2}
+	\end{subtable}
+	\caption{Valors predits amb la xarxa neuronal}
+\end{table}
 
 \subsubsection{Màquines de Vectors Suport}
 
@@ -416,6 +453,118 @@ Com es pot observar a la \autoref{tab:neuron_yes_no} els millors paràmetres per
 \subsubsection{Xarxes neuronals}
 
 Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neural_K.R| que utilitza la rutina \verb|train()| amb el mètode \verb|nnet| per tal de trobar el millor paràmetre per a la xarxa neuronal. Per verificar les dades de \verb|train()| s'usa \emph{Cross-Validation}.
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|rrrr|}
+		\hline
+		size & decay & Accuracy & Kappa \\
+		\hline
+		13 & 0,01 & 0,7024945 & 0,4582371 \\
+		13 & 0,10 & 0,7563778 & 0,5359380 \\
+		15 & 0,01 & 0,7232956 & 0,4988062 \\
+		15 & 0,10 & 0,7543884 & 0,5358015 \\
+		17 & 0,01 & 0,7225496 & 0,5021978 \\
+		17 & 0,10 & 0,7583979 & 0,5492146 \\
+		19 & 0,01 & 0,7190431 & 0,5001007 \\
+		19 & 0,10 & 0,7659132 & 0,5608208 \\
+		21 & 0,01 & 0,7177959 & 0,5018095 \\
+		21 & 0,10 & 0,7696662 & 0,5735675 \\
+		23 & 0.01 & 0.7077666 & 0.4891685 \\
+		23 & 0.10 & 0.7786963 & 0.5862649 \\
+		25 & 0.01 & 0.7177911 & 0.4999727 \\
+		\rowcolor{Orange!40}
+		25 & 0.10 & 0.7711760 & 0.5728318 \\
+		27 & 0.01 & 0.7255627 & 0.5074409 \\
+		27 & 0.10 & 0.7687221 & 0.6025761 \\
+		\hline
+	\end{tabular}
+	\captionsetup{width=0.6\textwidth}
+	\caption{Valors retornats per la rutina \texttt{train()} indicant la precisió del model (més és millor) i els paràmetres \texttt{size} i \texttt{decay} usats.}
+	\label{tab:nnet_k}
+\end{table}
+
+Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la xarxa neuronal són $size = 25$ i $decay = 0,1$. Amb aquests paràmetres s'obtenen els següents resultats:
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		0 & 2613 & 10 & 7 & 10 & 5 & 7 & 11 & 5 & 16 & 14 \\
+		1 & 2 & 117 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 2 \\
+		2 & 1 & 0 & 151 & 1 & 0 & 0 & 0 & 1 & 0 & 1 \\
+		3 & 3 & 0 & 0 & 145 & 0 & 0 & 0 & 0 & 1 & 0 \\
+		4 & 0 & 1 & 0 & 0 & 100 & 0 & 0 & 1 & 0 & 0 \\
+		5 & 0 & 0 & 0 & 0 & 0 & 167 & 0 & 0 & 0 & 0 \\
+		6 & 0 & 3 & 3 & 0 & 2 & 1 & 148 & 0 & 0 & 1 \\
+		7 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 95 & 0 & 0 \\
+		8 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 170 & 0 \\
+		9 & 1 & 1 & 3 & 0 & 0 & 0 & 1 & 0 & 0 & 163 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts amb les dades d'entrenament. Error total 3,03\%}
+	\label{tab:nnet_k1}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=1\textwidth,
+				height=0.5\textwidth,
+				every axis plot post/.style={/pgf/number format/fixed},
+				ybar=5pt,
+				xtick = data,
+				bar width=12pt,
+				ymin = 0, ymax = 200,
+				enlarge x limits = 0.2,
+				restrict y to domain*=0:230,
+				visualization depends on=rawy\as\rawy, % Save the unclipped values
+				after end axis/.code={ % Draw line indicating break
+					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
+				},
+				nodes near coords={%
+					\pgfmathprintnumber{\rawy}% Print unclipped values
+				},
+				clip = false,
+				xticklabels from table = {data/nnet_k_train.csv}{category},
+				x tick label style={rotate=45, anchor=east},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/nnet_k_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/nnet_k_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		0 & 13945 & 270 & 215 & 364 & 131 & 358 & 191 & 170 & 314 & 290 \\
+		1 & 201 & 336 & 19 & 24 & 47 & 28 & 23 & 9 & 13 & 47 \\
+		2 & 146 & 41 & 584 & 6 & 36 & 24 & 43 & 22 & 18 & 23 \\
+		3 & 167 & 8 & 22 & 639 & 5 & 19 & 4 & 13 & 8 & 17 \\
+		4 & 105 & 25 & 32 & 7 & 367 & 20 & 29 & 14 & 5 & 8 \\
+		5 & 254 & 14 & 19 & 17 & 18 & 553 & 3 & 14 & 14 & 14 \\
+		6 & 140 & 43 & 21 & 23 & 67 & 13 & 678 & 51 & 3 & 10 \\
+		7 & 84 & 15 & 14 & 2 & 41 & 16 & 41 & 425 & 6 & 4 \\
+		8 & 267 & 15 & 8 & 6 & 16 & 24 & 3 & 2 & 586 & 24 \\
+		9 & 127 & 43 & 39 & 26 & 25 & 10 & 18 & 5 & 4 & 62 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts amb les dades de validació. Error total 21,73\%}
+	\label{tab:nnet_k2}
+\end{table}
 
 \subsubsection{Màquines de Vectors Suport}
 

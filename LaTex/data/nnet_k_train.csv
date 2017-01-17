@@ -1,0 +1,11 @@
+category	hit	miss
+0	2613	10
+affirmative	117	15
+conditional	151	13
+doubt\_question	145	12
+emphasis	100	8
+negative	167	8
+relative	148	13
+topics	95	7
+wh\_question	170	17
+yn\_question	163	18
