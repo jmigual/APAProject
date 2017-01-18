@@ -23,8 +23,10 @@ checkError = function(predicted, real, type) {
 # Llegir les dades de training
 data.a = readAllData("a", single = FALSE)
 data.b = readAllData("b", single = FALSE)
-allData = reduceData(rbind(data.a, data.b))
-smallData = allData[sample(nrow(allData),3000),]
+data.a.r = reduceData(data.a)
+data.b.r = reduceData(data.b)
+allData = rbind(data.a.r, data.b.r)
+smallData = allData[sample(nrow(allData),1000),]
 
 # Per comprovar les dades s'usará K-Cross Validation
 
@@ -43,18 +45,18 @@ checkError(svmr.pred,smallData$target,"SVM small data")
 
 #### amb totes les dades
 svm.pred <- predict(svm.model, newdata = allData)
-print(table(data.b$target,svm.pred))
-checkError(svm.predb,allData$target,"SVM all data")
+print(table(allData$target,svm.pred))
+checkError(svm.pred,allData$target,"SVM all data")
 
 #### amb les dades del B
-svm.predb <- predict(svm.model, newdata = data.b)
-print(table(data.b$target,svmp.predb))
-checkError(svm.predb,data.b$target,"SVM")
+svm.pred <- predict(svm.model, newdata = data.b.r)
+print(table(data.b.r$target,svm.pred))
+checkError(svm.pred,data.b.r$target,"SVM")
 
 #### amb les dades del A
-svp.preda <- predict(svm.model, newdata = data.a)
-print(table(data.b$target,svmp.predb))
-checkError(svmp.preda,data.b$target,"SVM")
+svm.pred <- predict(svm.model, newdata = data.a.r)
+print(table(data.a.r$target,svm.pred))
+checkError(svm.pred,data.a.r$target,"SVM")
 
 
 ####### Linear
@@ -69,8 +71,8 @@ registerDoParallel(cl)
 svm.model = train(target ~ ., data = smallData, method="svmLinear", maxit = 200, trControl = trc,
                   tuneGrid = expand.grid(C=c(0.1, 1, 10)))
 stopCluster(cl)
-svmr.pred <- predict(svm.model)
-table(smallData$target, svmr.pred)
+svm.pred <- predict(svm.model)
+table(smallData$target, svm.pred)
 checkError(svmr.pred,smallData$target,"SVM small data")
 
 #### amb totes les dades
@@ -79,15 +81,11 @@ print(table(allData$target,svm.pred))
 checkError(svm.pred,allData$target,"SVM all data")
 
 #### amb les dades del B
-svm.predb <- predict(svm.model, newdata = data.b)
-print(table(data.b$target,svmp.predb))
-checkError(svm.predb,data.b$target,"SVM")
+svm.pred <- predict(svm.model, newdata = data.b.r)
+print(table(data.b.r$target,svm.pred))
+checkError(svm.pred,data.b.r$target,"SVM")
 
 #### amb les dades del A
-svp.preda <- predict(svm.model, newdata = data.a)
-print(table(data.b$target,svmp.predb))
-checkError(svmp.preda,data.b$target,"SVM")
-
-
-
-
+svm.pred <- predict(svm.model, newdata = data.a.r)
+print(table(data.a.r$target,svm.pred))
+checkError(svm.pred,data.a.r$target,"SVM")
