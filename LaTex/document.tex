@@ -366,6 +366,8 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 			\legend{Hit, Miss}
 		\end{axis}
 	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant LDA.}
 \end{figure}
 
 \begin{table}[H]
@@ -397,8 +399,8 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\begin{tikzpicture}
 		\begin{axis}[
 				barChart,
-				ymin = 0, ymax = 800,
-				restrict y to domain*=0:900,
+				ymin = 0, ymax = 850,
+				restrict y to domain*=0:950,
 				xticklabels from table = {data/lda_k_valid.csv}{category},
 			]
 			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_valid.csv};
@@ -406,6 +408,8 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 			\legend{Hit, Miss}
 		\end{axis}
 	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant LDA.}
 \end{figure}
 
 \subsubsection{QDA}
@@ -441,17 +445,19 @@ En comparació amb el LDA podem veure un error molt major alhora de predir les n
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
-	\begin{axis}[
-			barChart,
-			ymin = 0, ymax = 3300,
-			restrict y to domain*=0:3600,
-			xticklabels from table = {data/qda_k_train.csv}{category},
-		]
-		\addplot table[x expr=\coordindex, y=hit] {data/qda_k_train.csv};
-		\addplot table[x expr=\coordindex, y=miss] {data/qda_k_train.csv};
-		\legend{Hit, Miss}
-	\end{axis}
+		\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 3300,
+				restrict y to domain*=0:3600,
+				xticklabels from table = {data/qda_k_train.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/qda_k_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/qda_k_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
 	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant QDA.}
 \end{figure}
 
 Quan s'utilitza un altre individu per validar les dades, totes es prediuen amb sortida \emph{None} per tant aquest model no ens permet extrapolar res tot hi tenir un error total menor (35\%). Es podria dir que el individu B es menys expressiu que l’individu A en aquest model ja que totes les seves expressions es categoritzen com a \emph{no expressió}.
@@ -644,13 +650,13 @@ Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neu
 		19 & 0,10 & 0,7659132 & 0,5608208 \\
 		21 & 0,01 & 0,7177959 & 0,5018095 \\
 		21 & 0,10 & 0,7696662 & 0,5735675 \\
-		23 & 0.01 & 0.7077666 & 0.4891685 \\
-		23 & 0.10 & 0.7786963 & 0.5862649 \\
-		25 & 0.01 & 0.7177911 & 0.4999727 \\
+		23 & 0,01 & 0,7077666 & 0,4891685 \\
+		23 & 0,10 & 0,7786963 & 0,5862649 \\
+		25 & 0,01 & 0,7177911 & 0,4999727 \\
 		\rowcolor{Orange!40}
-		25 & 0.10 & 0.7711760 & 0.5728318 \\
-		27 & 0.01 & 0.7255627 & 0.5074409 \\
-		27 & 0.10 & 0.7687221 & 0.6025761 \\
+		25 & 0,10 & 0,7711760 & 0,5728318 \\
+		27 & 0,01 & 0,7255627 & 0,5074409 \\
+		27 & 0,10 & 0,7687221 & 0,6025761 \\
 		\hline
 	\end{tabular}
 	\captionsetup{width=0.6\textwidth}
@@ -698,6 +704,8 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 			\legend{Hit, Miss}
 		\end{axis}
 	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant una xarxa neuronal.}
 \end{figure}
 
 \begin{table}[H]
@@ -728,33 +736,22 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-			width=1\textwidth, height=0.5\textwidth,
-			every axis plot post/.style={/pgf/number format/fixed},
-			ybar=5pt,
-			xtick = data,
-			axis x line = bottom,
-			axis y line = left,
-			bar width=12pt,
+			barChart,
 			ymin = 0, ymax = 1550,
-			enlarge x limits = 0.2,
 			restrict y to domain*=0:1700,
-			visualization depends on=rawy\as\rawy, % Save the unclipped values
-			after end axis/.code={ % Draw line indicating break
-				\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
-			},
-			nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
-			clip = false,
 			xticklabels from table = {data/nnet_k_valid.csv}{category},
-			x tick label style={rotate=45, anchor=east},
 		]
 		\addplot table[x expr=\coordindex, y=hit] {data/nnet_k_valid.csv};
 		\addplot table[x expr=\coordindex, y=miss] {data/nnet_k_valid.csv};
 		\legend{Hit, Miss}
 	\end{axis}
 	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant una xarxa neuronal.}
 \end{figure}
 
 \subsubsection{Màquines de Vectors Suport}
+\paragraph{Lineal}
 
 \begin{table}[H]
 	\centering
@@ -762,13 +759,204 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\begin{tabular}{|rrr|}
 		\hline
 		C & Accuracy & Kappa \\
-		8 & 0.7593957 & 0.4902876 \\
+		8 & 0,7593957 & 0,4902876 \\
 		\rowcolor{Orange!40}
-		9 & 0.7616539 & 0.4961347 \\
-		10 & 0.7606533 & 0.4938614 \\
+		9 & 0,7616539 & 0,4961347 \\
+		10 & 0,7606533 & 0,4938614 \\
 		\hline
 	\end{tabular}
 \end{table}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 2532 & 85 & 63 & 56 & 39 & 94 & 69 & 44 & 122 & 75 \\
+		2 & 3 & 46 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		3 & 10 & 0 & 100 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+		4 & 10 & 2 & 0 & 120 & 0 & 0 & 1 & 0 & 0 & 1 \\
+		5 & 4 & 4 & 1 & 0 & 75 & 2 & 1 & 0 & 0 & 0 \\
+		6 & 1 & 0 & 0 & 0 & 1 & 75 & 0 & 0 & 0 & 0 \\
+		7 & 6 & 1 & 1 & 0 & 2 & 0 & 99 & 4 & 0 & 1 \\
+		8 & 4 & 0 & 1 & 1 & 0 & 1 & 0 & 70 & 0 & 0 \\
+		9 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 42 & 0 \\
+		10 & 4 & 2 & 0 & 2 & 0 & 0 & 2 & 0 & 0 & 109 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts amb les dades d'entrenament. Error total 18,10 \%}
+	\label{tab:svm_lineal_k1}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 150,
+				restrict y to domain*=0:170,
+				xticklabels from table = {data/svm_lineal_k_train.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/svm_lineal_k_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/svm_lineal_k_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant una SVM lineal.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 14964 & 511 & 389 & 499 & 308 & 668 & 407 & 281 & 844 & 75 \\
+		2 & 13 & 171 & 3 & 16 & 5 & 4 & 23 & 12 & 2 & 0 \\
+		3 & 94 & 14 & 503 & 6 & 63 & 13 & 18 & 15 & 3 & 0 \\
+		4 & 90 & 8 & 7 & 523 & 4 & 23 & 30 & 2 & 4 & 1 \\
+		5 & 72 & 38 & 24 & 3 & 309 & 17 & 9 & 2 & 5 & 0 \\
+		6 & 77 & 3 & 8 & 3 & 9 & 307 & 1 & 0 & 12 & 0 \\
+		7 & 51 & 20 & 18 & 10 & 25 & 10 & 518 & 54 & 1 & 1 \\
+		8 & 44 & 14 & 10 & 10 & 5 & 12 & 5 & 342 & 1 & 0 \\
+		9 & 26 & 2 & 2 & 0 & 0 & 12 & 1 & 0 & 121 & 0 \\
+		10 & 54 & 21 & 7 & 22 & 16 & 0 & 10 & 1 & 1 & 109 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts amb les dades de validació. Error total 23,92 \%}
+	\label{tab:svm_lineal_k2}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 950,
+				restrict y to domain*=0:1150,
+				xticklabels from table = {data/svm_lineal_k_valid.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/svm_lineal_k_valid.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/svm_lineal_k_valid.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant una SVM lineal.}
+\end{figure}
+
+\paragraph{Radial}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|rrrr|}
+		\hline
+		C & sigma & Accuracy & Kappa \\
+		\hline
+		15 & 0,01 & 0,8022794 & 0,5985588 \\
+		15 & 0,05 & 0,8215548 & 0,6525660 \\
+		15 & 0,10 & 0,8107551 & 0,6292849 \\
+		16 & 0,01 & 0,8057839 & 0,6078905 \\
+		16 & 0,05 & 0,8208035 & 0,6519884 \\
+		16 & 0,10 & 0,8095032 & 0,6270414 \\
+		17 & 0,01 & 0,8075283 & 0,6127379 \\
+		\rowcolor{Orange!40}
+		17 & 0,05 & 0,8220473 & 0,6550542 \\
+		17 & 0,10 & 0,8092501 & 0,6266172 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 2570 & 20 & 13 & 18 & 4 & 6 & 13 & 3 & 27 & 14 \\
+		2 & 0 & 119 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		3 & 0 & 0 & 153 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		4 & 2 & 0 & 0 & 160 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		5 & 0 & 0 & 0 & 0 & 112 & 0 & 0 & 0 & 0 & 0 \\
+		6 & 0 & 0 & 0 & 0 & 0 & 168 & 0 & 0 & 0 & 0 \\
+		7 & 0 & 1 & 0 & 0 & 1 & 0 & 159 & 0 & 0 & 0 \\
+		8 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 115 & 0 & 0 \\
+		9 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 137 & 0 \\
+		10 & 2 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 172 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts amb les dades d'entrenament. Error total 3,13 \%}
+	\label{tab:svm_radial_k1}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 200,
+				restrict y to domain*=0:240,
+				xticklabels from table = {data/svm_radial_k_train.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/svm_radial_k_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/svm_radial_k_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant una SVM lineal.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 14829 & 375 & 286 & 307 & 208 & 434 & 201 & 156 & 440 & 335 \\
+		2 & 56 & 285 & 20 & 2 & 5 & 3 & 19 & 20 & 0 & 18 \\
+		3 & 73 & 13 & 553 & 13 & 25 & 15 & 57 & 22 & 8 & 13 \\
+		4 & 61 & 0 & 3 & 753 & 0 & 8 & 4 & 0 & 0 & 8 \\
+		5 & 46 & 28 & 37 & 0 & 438 & 5 & 21 & 17 & 1 & 2 \\
+		6 & 88 & 7 & 1 & 0 & 12 & 581 & 0 & 1 & 1 & 1 \\
+		7 & 68 & 50 & 45 & 4 & 36 & 0 & 678 & 55 & 2 & 8 \\
+		8 & 76 & 17 & 13 & 3 & 13 & 3 & 34 & 434 & 0 & 2 \\
+		9 & 105 & 5 & 2 & 3 & 5 & 13 & 2 & 0 & 542 & 5 \\
+		10 & 83 & 22 & 11 & 7 & 2 & 4 & 6 & 4 & 0 & 669 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts amb les dades de validació. Error total 17,47 \%}
+	\label{tab:svm_radial_k2}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 850,
+				restrict y to domain*=0:950,
+				xticklabels from table = {data/svm_radial_k_valid.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/svm_radial_k_valid.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/svm_radial_k_valid.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant una SVM lineal.}
+\end{figure}
 
 \section{Model final escollit}
 \section{Conclusions}
