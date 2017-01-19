@@ -22,10 +22,36 @@
 \usepackage{colortbl}
 
 \usetikzlibrary{decorations.pathmorphing}
-
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1em}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\pgfplotsset{
+	barChart/.style={
+		width=1\textwidth, height=0.5\textwidth,
+		every axis plot post/.style={/pgf/number format/fixed},
+		ybar=5pt,
+		xtick = data,
+		axis x line = bottom,
+		axis y line = left,
+		bar width=12pt,
+		enlarge x limits = 0.2,
+		visualization depends on=rawy\as\rawy, % Save the unclipped values
+		after end axis/.code={ % Draw line indicating break
+			\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
+		},
+		nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
+		clip = false,
+		x tick label style={rotate=45, anchor=east},
+	}
+}
 
 \newcolumntype{R}{>{\raggedleft}p{2cm}}
 \newcommand{\sectionbreak}{\clearpage}
@@ -310,24 +336,10 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\centering
 	\begin{tikzpicture}
 		\begin{axis}[
-				width=1\textwidth, height=0.5\textwidth,
-				every axis plot post/.style={/pgf/number format/fixed},
-				ybar=5pt,
-				xtick = data,
-				axis x line = bottom,
-				axis y line = left,
-				bar width=12pt,
+				barChart,
 				ymin = 0, ymax = 700,
-				enlarge x limits = 0.2,
 				restrict y to domain*=0:800,
-				visualization depends on=rawy\as\rawy, % Save the unclipped values
-				after end axis/.code={ % Draw line indicating break
-					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
-				},
-				nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
-				clip = false,
 				xticklabels from table = {data/lda_k_train.csv}{category},
-				x tick label style={rotate=45, anchor=east},
 			]
 			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_train.csv};
 			\addplot table[x expr=\coordindex, y=miss] {data/lda_k_train.csv};
@@ -364,24 +376,10 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\centering
 	\begin{tikzpicture}
 		\begin{axis}[
-				width=1\textwidth, height=0.5\textwidth,
-				every axis plot post/.style={/pgf/number format/fixed},
-				ybar=5pt,
-				xtick = data,
-				axis x line = bottom,
-				axis y line = left,
-				bar width=12pt,
+				barChart,
 				ymin = 0, ymax = 800,
-				enlarge x limits = 0.2,
 				restrict y to domain*=0:900,
-				visualization depends on=rawy\as\rawy, % Save the unclipped values
-				after end axis/.code={ % Draw line indicating break
-					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
-				},
-				nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
-				clip = false,
 				xticklabels from table = {data/lda_k_valid.csv}{category},
-				x tick label style={rotate=45, anchor=east},
 			]
 			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_valid.csv};
 			\addplot table[x expr=\coordindex, y=miss] {data/lda_k_valid.csv};
@@ -424,28 +422,14 @@ En comparació amb el LDA podem veure un error molt major alhora de predir les n
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
-	width=1\textwidth, height=0.5\textwidth,
-	every axis plot post/.style={/pgf/number format/fixed},
-	ybar=5pt,
-	xtick = data,
-	axis x line = bottom,
-	axis y line = left,
-	bar width=12pt,
-	ymin = 0, ymax = 3300,
-	enlarge x limits = 0.2,
-	restrict y to domain*=0:3600,
-	visualization depends on=rawy\as\rawy, % Save the unclipped values
-	after end axis/.code={ % Draw line indicating break
-		\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
-	},
-	nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
-	clip = false,
-	xticklabels from table = {data/qda_k_train.csv}{category},
-	x tick label style={rotate=45, anchor=east},
-	]
-	\addplot table[x expr=\coordindex, y=hit] {data/qda_k_train.csv};
-	\addplot table[x expr=\coordindex, y=miss] {data/qda_k_train.csv};
-	\legend{Hit, Miss}
+			barChart,
+			ymin = 0, ymax = 3300,
+			restrict y to domain*=0:3600,
+			xticklabels from table = {data/qda_k_train.csv}{category},
+		]
+		\addplot table[x expr=\coordindex, y=hit] {data/qda_k_train.csv};
+		\addplot table[x expr=\coordindex, y=miss] {data/qda_k_train.csv};
+		\legend{Hit, Miss}
 	\end{axis}
 	\end{tikzpicture}
 \end{figure}
@@ -527,6 +511,96 @@ Com es pot observar a la \autoref{tab:nnet_yes_no} els millors paràmetres per a
 \end{table}
 
 \subsubsection{Màquines de Vectors Suport}
+\paragraph{Lineals}
+
+Per poder classificar mitjançant Màquines de Vector Suport s’ha creat l’script \verb|SVM_si_no.R| que utilitza la rutina \verb|train()| amb el mètode \verb|nnet| per tal de trobar el millor paràme	tre per a la xarxa neuronal. Per verificar les dades de \verb|train()| s’usa Cross-Validation amb 4 grups. Els resultats obtinguts han estat els següents: 
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|rrr|}
+		\hline
+		C & Accuracy & Kappa \\
+		\hline
+		1 & 0,7967429 & 0,5260806 \\
+		25 & 0,7992505 & 0,5352465 \\
+		\rowcolor{Orange!40}
+		50 & 0,8002525 & 0,5381296 \\
+		75 & 0,7995017 & 0,5396425 \\
+		100 & 0,7989995 & 0,5386959 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\def\arraystretch{1.5}
+	\begin{subtable}[t]{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|rr|}
+			\hline
+			& \multicolumn{2}{c|}{Valor real} \\
+			Valor predit & 0 & 1 \\
+			\hline
+			0 & 2365 & 509 \\
+			1 &  233 & 883 \\
+			\hline
+		\end{tabular}
+		\caption{Conjunt d'entrenament. L'error és d'un 18,6 \%.}
+		\label{tab:svm_lineal_yes_no1}
+	\end{subtable}
+	\hfill
+	\begin{subtable}[t]{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|rr|}
+			\hline
+			& \multicolumn{2}{c|}{Valor real} \\
+			Valor predit & 0 & 1 \\
+			\hline
+			0 & 14030 & 3300 \\
+			1 &  1431 & 5185 \\
+			\hline
+		\end{tabular}
+		\caption{Conjunt de validació. L'error és d'un 19,76 \%.}
+		\label{tab:svm_lineal_yes_no2}
+	\end{subtable}
+	\caption{Valors predits amb una màquina de vectors suport lineal}
+\end{table}
+
+\paragraph{Radial}
+
+\begin{table}[H]
+	\def\arraystretch{1.5}
+	\begin{subtable}[t]{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|rr|}
+			\hline
+			& \multicolumn{2}{c|}{Valor real} \\
+			Valor predit & 0 & 1 \\
+			\hline
+			0 & 2594 &   68 \\
+			1 &    4 & 1324 \\
+			\hline
+		\end{tabular}
+		\caption{Conjunt d'entrenament. L'error és d'un 1,8 \%.}
+		\label{tab:svm_radial_yes_no1}
+	\end{subtable}
+	\hfill
+	\begin{subtable}[t]{0.49\textwidth}
+		\centering
+		\begin{tabular}{|c|rr|}
+			\hline
+			& \multicolumn{2}{c|}{Valor real} \\
+			Valor predit & 0 & 1 \\
+			\hline
+			0 & 14324 & 2010 \\
+			1 &  1137 & 6475 \\
+			\hline
+		\end{tabular}
+		\caption{Conjunt de validació. L'error és d'un 13,14 \%.}
+		\label{tab:svm_radial_yes_no2}
+	\end{subtable}
+	\caption{Valors predits amb una màquina de vectors suport radial}
+\end{table}
 
 \subsection{Detecció de tipus d'expressió}
 \subsubsection{Xarxes neuronals}
@@ -574,16 +648,16 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 		& \multicolumn{10}{c|}{Valor real} \\
 		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
 		\hline
-		0 & 2613 & 10 & 7 & 10 & 5 & 7 & 11 & 5 & 16 & 14 \\
-		1 & 2 & 117 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 2 \\
-		2 & 1 & 0 & 151 & 1 & 0 & 0 & 0 & 1 & 0 & 1 \\
-		3 & 3 & 0 & 0 & 145 & 0 & 0 & 0 & 0 & 1 & 0 \\
-		4 & 0 & 1 & 0 & 0 & 100 & 0 & 0 & 1 & 0 & 0 \\
-		5 & 0 & 0 & 0 & 0 & 0 & 167 & 0 & 0 & 0 & 0 \\
-		6 & 0 & 3 & 3 & 0 & 2 & 1 & 148 & 0 & 0 & 1 \\
-		7 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 95 & 0 & 0 \\
-		8 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 170 & 0 \\
-		9 & 1 & 1 & 3 & 0 & 0 & 0 & 1 & 0 & 0 & 163 \\
+		1 & 2613 & 10 & 7 & 10 & 5 & 7 & 11 & 5 & 16 & 14 \\
+		2 & 2 & 117 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 2 \\
+		3 & 1 & 0 & 151 & 1 & 0 & 0 & 0 & 1 & 0 & 1 \\
+		4 & 3 & 0 & 0 & 145 & 0 & 0 & 0 & 0 & 1 & 0 \\
+		5 & 0 & 1 & 0 & 0 & 100 & 0 & 0 & 1 & 0 & 0 \\
+		6 & 0 & 0 & 0 & 0 & 0 & 167 & 0 & 0 & 0 & 0 \\
+		7 & 0 & 3 & 3 & 0 & 2 & 1 & 148 & 0 & 0 & 1 \\
+		8 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 95 & 0 & 0 \\
+		9 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 170 & 0 \\
+		10 & 1 & 1 & 3 & 0 & 0 & 0 & 1 & 0 & 0 & 163 \\
 		\hline
 	\end{tabular}
 	\caption{Resultats obtinguts amb les dades d'entrenament. Error total 3,03\%}
@@ -594,24 +668,10 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\centering
 	\begin{tikzpicture}
 		\begin{axis}[
-				width=1\textwidth, height=0.5\textwidth,
-				every axis plot post/.style={/pgf/number format/fixed},
-				ybar=5pt,
-				xtick = data,
-				axis x line = bottom,
-				axis y line = left,
-				bar width=12pt,
+				barChart,
 				ymin = 0, ymax = 200,
-				enlarge x limits = 0.2,
 				restrict y to domain*=0:230,
-				visualization depends on=rawy\as\rawy, % Save the unclipped values
-				after end axis/.code={ % Draw line indicating break
-					\draw [ultra thick, white, decoration={snake, amplitude=1pt}, decorate] (rel axis cs:0,1.05) -- (rel axis cs:1,1.05);
-				},
-				nodes near coords={	\pgfmathprintnumber{\rawy} }, % Print unclipped values
-				clip = false,
 				xticklabels from table = {data/nnet_k_train.csv}{category},
-				x tick label style={rotate=45, anchor=east},
 			]
 			\addplot table[x expr=\coordindex, y=hit] {data/nnet_k_train.csv};
 			\addplot table[x expr=\coordindex, y=miss] {data/nnet_k_train.csv};
@@ -628,16 +688,16 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 		& \multicolumn{10}{c|}{Valor real} \\
 		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
 		\hline
-		0 & 13945 & 270 & 215 & 364 & 131 & 358 & 191 & 170 & 314 & 290 \\
-		1 & 201 & 336 & 19 & 24 & 47 & 28 & 23 & 9 & 13 & 47 \\
-		2 & 146 & 41 & 584 & 6 & 36 & 24 & 43 & 22 & 18 & 23 \\
-		3 & 167 & 8 & 22 & 639 & 5 & 19 & 4 & 13 & 8 & 17 \\
-		4 & 105 & 25 & 32 & 7 & 367 & 20 & 29 & 14 & 5 & 8 \\
-		5 & 254 & 14 & 19 & 17 & 18 & 553 & 3 & 14 & 14 & 14 \\
-		6 & 140 & 43 & 21 & 23 & 67 & 13 & 678 & 51 & 3 & 10 \\
-		7 & 84 & 15 & 14 & 2 & 41 & 16 & 41 & 425 & 6 & 4 \\
-		8 & 267 & 15 & 8 & 6 & 16 & 24 & 3 & 2 & 586 & 24 \\
-		9 & 127 & 43 & 39 & 26 & 25 & 10 & 18 & 5 & 4 & 62 \\
+		1 & 13945 & 270 & 215 & 364 & 131 & 358 & 191 & 170 & 314 & 290 \\
+		2 & 201 & 336 & 19 & 24 & 47 & 28 & 23 & 9 & 13 & 47 \\
+		3 & 146 & 41 & 584 & 6 & 36 & 24 & 43 & 22 & 18 & 23 \\
+		4 & 167 & 8 & 22 & 639 & 5 & 19 & 4 & 13 & 8 & 17 \\
+		5 & 105 & 25 & 32 & 7 & 367 & 20 & 29 & 14 & 5 & 8 \\
+		6 & 254 & 14 & 19 & 17 & 18 & 553 & 3 & 14 & 14 & 14 \\
+		7 & 140 & 43 & 21 & 23 & 67 & 13 & 678 & 51 & 3 & 10 \\
+		8 & 84 & 15 & 14 & 2 & 41 & 16 & 41 & 425 & 6 & 4 \\
+		9 & 267 & 15 & 8 & 6 & 16 & 24 & 3 & 2 & 586 & 24 \\
+		10 & 127 & 43 & 39 & 26 & 25 & 10 & 18 & 5 & 4 & 62 \\
 		\hline
 	\end{tabular}
 	\caption{Resultats obtinguts amb les dades de validació. Error total 21,73\%}
@@ -675,6 +735,20 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 \end{figure}
 
 \subsubsection{Màquines de Vectors Suport}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|rrr|}
+		\hline
+		C & Accuracy & Kappa \\
+		8 & 0.7593957 & 0.4902876 \\
+		\rowcolor{Orange!40}
+		9 & 0.7616539 & 0.4961347 \\
+		10 & 0.7606533 & 0.4938614 \\
+		\hline
+	\end{tabular}
+\end{table}
 
 \section{Model final escollit}
 \section{Conclusions}
