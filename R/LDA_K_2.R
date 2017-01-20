@@ -3,38 +3,29 @@ rm(list=ls())
 library(MASS)
 source("./R/readAllData.R")
 
-checkError = function(predicted, real, type) {
-  tab = table(factor(predicted, levels(real)), real)
-  print(paste("Error", type))
-  print(tab)
-  
-  error = 100 - (sum(diag(tab)))/length(predicted) * 100
-  print(error)
-}
-
 #######################
 # INICI DE L'EXECUCIO #
 #######################
 
-# Llegir les dades de training
-dataA = readAllData("a", single = FALSE)
+# Llegir les dades
+allData = readAllData()
 
-# Llegir les dades de testing
-dataB = readAllData("b", single = FALSE)
+index.sample = sample(nrow(allData), nrow(allData)/7)
+data.train = allData[index.sample,]
+data.valid = allData[!1:nrow(allData) %in% index.sample,]
 
-##Generem el model
-lda.model <- lda (dataA$target ~ . , dataA)
-
+# Generem el model
+lda.model <- lda (data.train$target ~ ., data.train)
 lda.model
 
 # Visualitzacio de l'error de training
 pred.train = predict(lda.model)
-checkError(pred.train$class, dataA$target, "training")
+checkError(pred.train$class, data.train$target, "training")
 
 #Error de cross validation
 pred.cv <- update(lda.model,CV=TRUE)
-checkError(pred.cv$class, dataA$target, "cross")
+checkError(pred.cv$class, data.train$target, "cross")
 
 # Visualitzacio de l'error de testing
-pred.valid = predict(lda.model, newdata = dataB)
-checkError(pred.valid$class, dataB$target, "validacio")
+pred.valid = predict(lda.model, newdata = data.valid)
+checkError(pred.valid$class, data.valid$target, "validacio")
