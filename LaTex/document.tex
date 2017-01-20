@@ -414,6 +414,92 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant LDA.}
 \end{figure}
 
+Dona't que utilitzar un sol individu per entrenar i un altre per validar les dades no és una bona estratègia com s'ha vist anteriorment, s'ha creat l'script \verb|LDA_K_2.R| que utilitza una part de tot el conjunt de dades sencer per entrenar i una altra part per validar les dades. D'aquesta manera es millora la precisió de l'algorisme com es pot veure a continuació:
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 2446 & 60 & 36 & 57 & 13 & 81 & 24 & 27 & 51 & 52 \\
+		2 & 14 & 71 & 0 & 1 & 3 & 0 & 1 & 1 & 2 & 1 \\
+		3 & 25 & 2 & 114 & 0 & 2 & 1 & 1 & 0 & 2 & 1 \\
+		4 & 14 & 0 & 2 & 133 & 0 & 2 & 1 & 0 & 0 & 0 \\
+		5 & 17 & 0 & 2 & 0 & 94 & 3 & 1 & 0 & 0 & 0 \\
+		6 & 22 & 0 & 2 & 0 & 0 & 86 & 0 & 0 & 1 & 1 \\
+		7 & 16 & 1 & 2 & 3 & 0 & 0 & 132 & 3 & 1 & 1 \\
+		8 & 19 & 0 & 1 & 2 & 2 & 3 & 0 & 97 & 1 & 0 \\
+		9 & 14 & 0 & 1 & 2 & 2 & 2 & 0 & 0 & 104 & 1 \\
+		10 & 11 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 1 & 96 \\
+		\hline
+	\end{tabular}
+	\caption{Resultats obtinguts a l'usar cross-validation. Error total 15,46 \%.}
+\end{table}
+
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			barChart,
+				ymin = 0, ymax = 200,
+				restrict y to domain*=0:250,
+				xticklabels from table = {data/lda_k_2_train.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_2_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/lda_k_2_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant LDA.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 14783 & 336 & 234 & 282 & 92 & 468 & 131 & 119 & 306 & 347 \\
+		2 & 88 & 432 & 7 & 5 & 2 & 8 & 3 & 3 & 2 & 8 \\
+		3 & 59 & 0 & 704 & 0 & 13 & 0 & 1 & 0 & 1 & 1 \\
+		4 & 52 & 2 & 6 & 749 & 2 & 5 & 7 & 0 & 1 & 2 \\
+		5 & 55 & 0 & 0 & 0 & 596 & 2 & 0 & 0 & 1 & 0 \\
+		6 & 92 & 5 & 13 & 7 & 12 & 548 & 0 & 0 & 4 & 3 \\
+		7 & 112 & 22 & 5 & 27 & 15 & 24 & 892 & 0 & 1 & 5 \\
+		8 & 73 & 2 & 5 & 0 & 2 & 2 & 0 & 577 & 0 & 5 \\
+		9 & 61 & 8 & 1 & 0 & 4 & 4 & 0 & 0 & 679 & 3 \\
+		10 & 86 & 1 & 1 & 2 & 7 & 1 & 0 & 0 & 0 & 720 \\
+		\hline
+	\end{tabular}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Resultats obtinguts al validar les dades amb la resta del conjunt, error total 13,64\%. Les expressions es poden veure a la \autoref{sec:tipus_expressio}.}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 950,
+				restrict y to domain*=0:1100,
+				xticklabels from table = {data/lda_k_2_valid.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_2_valid.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/lda_k_2_valid.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant LDA.}
+\end{figure}
+
 \subsubsection{QDA}
 L’script \verb|QDA_K.R|  obté un model QDA i a continuació testeja el model mitjançant cross-validation i aplicant-lo a un altre subjecte.
 
