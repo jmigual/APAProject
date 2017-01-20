@@ -111,13 +111,15 @@ L'objectiu d'aquest treball és poder decidir a partir d'una dada no usada prèv
 
 \section{Procés d'exploració de dades}
 
-El format en el que venen les dades és el següent: hi ha 9 expressions facials diferents i hi ha dos subjectes de prova diferents. Per cada expressió facial i subjecte hi ha:
+Les dades han estat obtingudes mitjançant una càmera Kinect RGB\cite{freitas} i el format en el que venen les dades és el següent: hi ha 9 expressions facials diferents i hi ha dos subjectes de prova. Per cada expressió facial i subjecte hi ha:
 \begin{itemize}
 	\item Un arxiu \verb|<subjecte>_<expressio>_datapoints.txt| que conté 1 coordenada de temps i 100 punts en 3 dimensions fent un total de 301 coordenades per arxiu.
 	\item Un arxiu \verb|<subjecte>_<expressio>_targets.txt| que per a cada element de l'arxiu \verb|*_datapoints.txt| val 0 o 1 en funció de si s'està fent o no l'expressió facial a la que fa referència l'arxiu.
 \end{itemize}
 
- Donat que s'està fent classificació no s'ha considerat rellevant la coordenada de temps i, per tant, s'ha descartat. A part, s'han igualat les variàncies de totes les dades (mitjançant la rutina \verb|scale()|).
+
+
+Donat que s'està fent classificació no s'ha considerat rellevant la coordenada de temps i, per tant, s'ha descartat. A part, s'han igualat les variàncies de totes les dades (mitjançant la rutina \verb|scale()|).
 
 S'han realitzat dos \emph{scripts} en R. El primer és per visualitzar les dades cronològicament (\verb|loadData.R|) i el segon és per poder interpretar-les a l'hora de realitzar una classificació (\verb|clustering.R|).
 
