@@ -35,7 +35,7 @@
 
 \pgfplotsset{
 	barChart/.style={
-		width=1\textwidth, height=0.5\textwidth,
+		width=1\textwidth, height=0.4\textwidth,
 		every axis plot post/.style={/pgf/number format/fixed},
 		ybar=5pt,
 		xtick = data,
@@ -54,7 +54,6 @@
 }
 
 \newcolumntype{R}{>{\raggedleft}p{2cm}}
-\newcommand{\sectionbreak}{\clearpage}
 
 \title{Projecte APA}
 \author{Joan Marcè \and Esteve Tarragó}
@@ -109,6 +108,7 @@ L'objectiu d'aquest treball és poder decidir a partir d'una dada no usada prèv
 	\item Trobar quin tipus de model s'adequa millor als objectius anteriors i comprar-los entre ells.
 \end{enumerate}
 
+\newpage
 \section{Procés d'exploració de dades}
 
 Les dades han estat obtingudes mitjançant una càmera Kinect RGB\cite{freitas} i el format en el que venen les dades és el següent: hi ha 9 expressions facials diferents i hi ha dos subjectes de prova. Per cada expressió facial i subjecte hi ha:
@@ -141,6 +141,7 @@ Com es pot veure als gràfics anteriors la dada Z no permet agrupar les dades ga
 
 També, donat que sembla ser viable una projecció, s'ha fet a l'script \texttt{reduceData.R} que projecta cada punt a una sola dimensió reduint l'espai de dades de 300 a 100 dimensions. Tot i així hi ha una pèrdua d'informació al fer la projecció però s'ha considerat que aquesta pèrdua d'informació és poca en comparació al guany que s'obté al reduir les dimensions.
 
+\newpage
 \section{Resultats amb mètodes lineals/quadràtics}
 Donat que hi ha diversos objectius en aquest treball s'han usat diferents mètodes per a poder resoldre cadascun dels objectius, han estat els següents:
 \begin{itemize}
@@ -161,7 +162,7 @@ L'script \verb|logistic.R| realitza classificació amb regressió logística mit
 En el primer experiment s'han usat totes les expressions facials d'una persona (dades contingudes a tots els arxius \verb|a_*.txt|) per a l'entrenament i per a la validació s'han usat totes les dades de l'altre persona (dades contingudes a tots els arxius \verb|b_*.txt|). Es poden veure els resultats a la \autoref{tab:reglog_training1} i la \autoref{tab:reglog_training2}.
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.3}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -196,7 +197,7 @@ En el primer experiment s'han usat totes les expressions facials d'una persona (
 En aquest segon experiment s'ha usat un subconjunt de totes les dades per entrenar i el complementari d'aquest per validar les dades, com es pot observar a la \autoref{tab:reglog_training4} s'obtenen millors resultats per les dades de validació respecte \autoref{tab:reglog_training2}.
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.3}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -235,7 +236,7 @@ L'script \verb|LDA_si_no.R| realitza classificació amb \emph{lda} mitjançant l
 En el primer experiment s'han usat totes les expressions facials d'una persona (dades contingudes a tots els arxius \verb|a_*.txt|) per a l'entrenament i per a la validació s'han usat totes les dades de l'altre persona (dades contingudes a tots els arxius \verb|b_*.txt|). Es poden veure els resultats a la \autoref{tab:lda_yes_no1} i la 	\autoref{tab:lda_yes_no2}.
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.3}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -271,7 +272,7 @@ En el primer experiment s'han usat totes les expressions facials d'una persona (
 En aquest segon experiment s'ha usat un subconjunt de totes les dades per entrenar i el complementari d'aquest per validar les dades, com es pot observar a la \autoref{tab:lda_yes_no4} s'obtenen millors resultats per les dades de validació.
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.3}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -324,9 +325,9 @@ En aquest segon experiment s'ha usat un subconjunt de totes les dades per entren
 
 \subsubsection{LDA}
 
-L’script \verb|LDA_K.R|  obté un model LDA i a continuació testeja el model mitjançant cross-validation i aplicant-lo a un altre subjecte.
+L'script \verb|LDA_K.R|  obté un model LDA i a continuació comprova el model mitjançant \emph{cross-validation} i aplicant-lo a un altre subjecte.
 
-Els resultats obtinguts son oposats. Això ens indica que hi ha fortes diferències entre els les expressions de ambdues persones exceptuant la expressió condicional que obté un un error molt reduït en comparació a la resta d’expressions.
+Els resultats obtinguts son oposats. Això indica que hi ha fortes diferències entre els les expressions de ambdues persones exceptuant l'expressió condicional que obté un un error molt reduït en comparació a la resta d'expressions.
 
 També destaca que les expressions de afirmació s’han classificat com a èmfasis majoritàriament i viceversa. Això podria indicar que la persona B i la A tenen les expressions de èmfasis i afirmació invertides.
 
@@ -414,7 +415,7 @@ També destaca que les expressions de afirmació s’han classificat com a èmfa
 	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant LDA.}
 \end{figure}
 
-Dona't que utilitzar un sol individu per entrenar i un altre per validar les dades no és una bona estratègia com s'ha vist anteriorment, s'ha creat l'script \verb|LDA_K_2.R| que utilitza una part de tot el conjunt de dades sencer per entrenar i una altra part per validar les dades. D'aquesta manera es millora la precisió de l'algorisme com es pot veure a continuació:
+Donat que utilitzar un sol individu per entrenar i un altre per validar les dades no és una bona estratègia, com s'ha vist anteriorment, s'ha creat l'script \verb|LDA_K_2.R| que utilitza una part de tot el conjunt de dades sencer per entrenar i una altra part per validar les dades. D'aquesta manera es millora la precisió de l'algorisme com es pot veure a continuació:
 
 \begin{table}[H]
 	\centering
@@ -446,7 +447,7 @@ Dona't que utilitzar un sol individu per entrenar i un altre per validar les dad
 		\begin{axis}[
 			barChart,
 				ymin = 0, ymax = 200,
-				restrict y to domain*=0:250,
+				restrict y to domain*=0:230,
 				xticklabels from table = {data/lda_k_2_train.csv}{category},
 			]
 			\addplot table[x expr=\coordindex, y=hit] {data/lda_k_2_train.csv};
@@ -501,10 +502,9 @@ Dona't que utilitzar un sol individu per entrenar i un altre per validar les dad
 \end{figure}
 
 \subsubsection{QDA}
-L’script \verb|QDA_K.R|  obté un model QDA i a continuació testeja el model mitjançant cross-validation i aplicant-lo a un altre subjecte.
+L’script \verb|QDA_K.R|  obté un model QDA i a continuació comprova el model mitjançant cross-validation i aplicant-lo a un altre subjecte.
 
-
-En comparació amb el LDA podem veure un error molt major alhora de predir les no expressions. També veiem que l’error a l’hora de predir quan s’esta fent una expressió es molt menor que en el LDA exceptuant l’expressió d’emphasis que LDA la categoritza millor
+En comparació amb el LDA es pot veure un error molt major alhora de predir les no expressions. També es veu que l'error a l’hora de predir quan s’esta fent una expressió es molt menor que en el LDA exceptuant l'expressió d'\emph{emphasis} que LDA la categoritza millor
 
 \begin{table}[H]
 	\centering
@@ -527,7 +527,7 @@ En comparació amb el LDA podem veure un error molt major alhora de predir les n
 		\hline
 	\end{tabular}
 	\captionsetup{width=0.8\textwidth}
-	\caption{Resultats obtinguts al validar les dades amb cross-validation, error total 43\%. Les expressions es poden veure a \autoref{sec:tipus_expressio}.}
+	\caption{Resultats obtinguts al validar les dades d'entrenament, error total 44,25 \%. Les expressions es poden veure a \autoref{sec:tipus_expressio}.}
 \end{table}
 
 \begin{figure}[H]
@@ -548,8 +548,96 @@ En comparació amb el LDA podem veure un error molt major alhora de predir les n
 	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant QDA.}
 \end{figure}
 
-Quan s'utilitza un altre individu per validar les dades, totes es prediuen amb sortida \emph{None} per tant aquest model no ens permet extrapolar res tot hi tenir un error total menor (35\%). Es podria dir que el individu B es menys expressiu que l’individu A en aquest model ja que totes les seves expressions es categoritzen com a \emph{no expressió}.
+Quan s'utilitza un altre individu per validar les dades, totes es prediuen amb sortida \emph{None} per tant aquest model no permet extrapolar res tot hi tenir un error total menor (35\%). Es podria dir que l'individu B és menys expressiu que l'A en aquest model ja que totes les seves expressions es categoritzen com a \emph{no expressió}.
 
+En canvi si s'usa un subconjunt aleatori de tot el conjunt de dades, els resultats obtinguts són molt diferents i l'error de validació no és tant exagerat, tal i com es pot veure a la \autoref{tab:qda_k2}. Això s'ha realitzat a l'script \verb|QDA_K_2.R|.
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 4124 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		2 & 389 & 489 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		3 & 776 & 0 & 570 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		4 & 440 & 0 & 0 & 645 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		5 & 226 & 0 & 0 & 0 & 455 & 0 & 0 & 0 & 0 & 0 \\
+		6 & 572 & 0 & 0 & 0 & 0 & 600 & 0 & 0 & 0 & 0 \\
+		7 & 884 & 0 & 0 & 0 & 0 & 0 & 591 & 0 & 0 & 0 \\
+		8 & 267 & 0 & 0 & 0 & 0 & 0 & 0 & 397 & 0 & 0 \\
+		9 & 548 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 582 & 0 \\
+		10 & 778 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 635 \\
+		\hline
+	\end{tabular}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Resultats obtinguts al validar les dades d'entrenament, error total 34,94 \%. Les expressions es poden veure a \autoref{sec:tipus_expressio}.}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+				barChart,
+				ymin = 0, ymax = 4200,
+				restrict y to domain*=0:4600,
+				xticklabels from table = {data/qda_k_2_train.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/qda_k_2_train.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/qda_k_2_train.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+		\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error d'entrenament en funció del tipus d'expressió facial utilitzant QDA.}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.2}
+	\begin{tabular}{|c|rrrrrrrrrr|}
+		\hline
+		& \multicolumn{10}{c|}{Valor real} \\
+		Valor predit & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+		\hline
+		1 & 4118 & 59 & 86 & 33 & 60 & 36 & 51 & 126 & 33 & 26 \\
+		2 & 434 & 394 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		3 & 709 & 0 & 481 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		4 & 479 & 0 & 0 & 593 & 0 & 0 & 0 & 0 & 0 & 0 \\
+		5 & 195 & 0 & 0 & 0 & 346 & 0 & 0 & 0 & 0 & 0 \\
+		6 & 550 & 0 & 0 & 0 & 0 & 604 & 0 & 0 & 0 & 0 \\
+		7 & 905 & 0 & 0 & 0 & 0 & 0 & 552 & 0 & 0 & 0 \\
+		8 & 271 & 0 & 0 & 0 & 0 & 0 & 0 & 304 & 0 & 0 \\
+		9 & 613 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 543 & 0 \\
+		10 & 781 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 586 \\
+		\hline
+	\end{tabular}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Resultats obtinguts al validar les dades de validació, error total 39 \%. Les expressions es poden veure a \autoref{sec:tipus_expressio}.}
+	\label{tab:qda_k2}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			barChart,
+				ymin = 0, ymax = 4200,
+				restrict y to domain*=0:4600,
+				xticklabels from table = {data/qda_k_2_valid.csv}{category},
+			]
+			\addplot table[x expr=\coordindex, y=hit] {data/qda_k_2_valid.csv};
+			\addplot table[x expr=\coordindex, y=miss] {data/qda_k_2_valid.csv};
+			\legend{Hit, Miss}
+		\end{axis}
+	\end{tikzpicture}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant QDA.}
+\end{figure}
+
+\newpage
 \section{Resultats amb mètodes no lineals}
 En el cas dels mètodes no lineals s'usaran Xarxes neuronals i Màquines de Vector Suport per a complir tots els objectius.
 
@@ -565,9 +653,6 @@ Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neu
 		\hline
 		size & decay & Accuracy & Kappa \\
 		\hline
-		13 & 0,00 & 0,7862118 & 0,5268094 \\
-		13 & 0,01 & 0,7959902 & 0,5506152 \\
-		13 & 0,10 & 0,8200551 & 0,5999062 \\
 		15 & 0,00 & 0,7837126 & 0,5273864 \\
 		15 & 0,01 & 0,7974985 & 0,5539709 \\
 		15 & 0,10 & 0,8265744 & 0,6134527 \\
@@ -591,7 +676,7 @@ Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neu
 Com es pot observar a la \autoref{tab:nnet_yes_no} els millors paràmetres per a la xarxa neuronal són $size = 19$ i $decay = 0,1$. Amb aquests paràmetres s'obtenen els següents resultats.
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.2}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -644,10 +729,12 @@ Per poder classificar mitjançant Màquines de Vector Suport s’ha creat l’sc
 		100 & 0,7989995 & 0,5386959 \\
 		\hline
 	\end{tabular}
+	\captionsetup{width=0.6\textwidth}
+	\caption{Valors retornats per la rutina \texttt{train()} indicant la precisió del model (més és millor) i el paràmetre \texttt{C}.}
 \end{table}
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.3}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -683,7 +770,7 @@ Per poder classificar mitjançant Màquines de Vector Suport s’ha creat l’sc
 \paragraph{Radial}
 
 \begin{table}[H]
-	\def\arraystretch{1.5}
+	\def\arraystretch{1.3}
 	\begin{subtable}[t]{0.49\textwidth}
 		\centering
 		\begin{tabular}{|c|rr|}
@@ -728,10 +815,6 @@ Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neu
 		\hline
 		size & decay & Accuracy & Kappa \\
 		\hline
-		13 & 0,01 & 0,7024945 & 0,4582371 \\
-		13 & 0,10 & 0,7563778 & 0,5359380 \\
-		15 & 0,01 & 0,7232956 & 0,4988062 \\
-		15 & 0,10 & 0,7543884 & 0,5358015 \\
 		17 & 0,01 & 0,7225496 & 0,5021978 \\
 		17 & 0,10 & 0,7583979 & 0,5492146 \\
 		19 & 0,01 & 0,7190431 & 0,5001007 \\
@@ -739,7 +822,7 @@ Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|neu
 		21 & 0,01 & 0,7177959 & 0,5018095 \\
 		21 & 0,10 & 0,7696662 & 0,5735675 \\
 		23 & 0,01 & 0,7077666 & 0,4891685 \\
-		23 & 0,10 & 0,7786963 & 0,5862649 \\
+		23 & 0,10 & 0,7706963 & 0,5862649 \\
 		25 & 0,01 & 0,7177911 & 0,4999727 \\
 		\rowcolor{Orange!40}
 		25 & 0,10 & 0,7711760 & 0,5728318 \\
@@ -839,6 +922,8 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 \end{figure}
 
 \subsubsection{Màquines de Vectors Suport}
+Per poder classificar mitjançant Xarxes Neuronals s'ha creat l'script \verb|svm2_K_.R| que utilitza la rutina \verb|train()| amb el mètode \verb|svmLinear| per a les lineals i \verb|svmRadial| per a les radials per tal de trobar el millor paràmetre. Per verificar les dades de \verb|train()| s'usa \emph{Cross-Validation}.
+
 \paragraph{Lineal}
 
 \begin{table}[H]
@@ -847,12 +932,15 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\begin{tabular}{|rrr|}
 		\hline
 		C & Accuracy & Kappa \\
+		\hline
 		8 & 0,7593957 & 0,4902876 \\
 		\rowcolor{Orange!40}
 		9 & 0,7616539 & 0,4961347 \\
 		10 & 0,7606533 & 0,4938614 \\
 		\hline
 	\end{tabular}
+	\captionsetup{width=0.6\textwidth}
+	\caption{Valors retornats per la rutina \texttt{train()} indicant la precisió del model (més és millor) i el paràmetre \texttt{C}.}
 \end{table}
 
 \begin{table}[H]
@@ -927,7 +1015,7 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\begin{axis}[
 				barChart,
 				ymin = 0, ymax = 950,
-				restrict y to domain*=0:1150,
+				restrict y to domain*=0:1100,
 				xticklabels from table = {data/svm_lineal_k_valid.csv}{category},
 			]
 			\addplot table[x expr=\coordindex, y=hit] {data/svm_lineal_k_valid.csv};
@@ -960,6 +1048,8 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 		17 & 0,10 & 0,8092501 & 0,6266172 \\
 		\hline
 	\end{tabular}
+	\captionsetup{width=0.6\textwidth}
+	\caption{Valors retornats per la rutina \texttt{train()} indicant la precisió del model (més és millor) i el paràmetre \texttt{C}.}
 \end{table}
 
 \begin{table}[H]
@@ -1046,9 +1136,76 @@ Com es pot observar a la \autoref{tab:nnet_k} els millors paràmetres per a la x
 	\caption{Gràfic comparatiu de l'error de validació en funció del tipus d'expressió facial utilitzant una SVM lineal.}
 \end{figure}
 
+\newpage
 \section{Model final escollit}
+\subsection{Detecció d'expressió facial}
+Un cop vistos tots els models es pot veure un resum de l'error d'aquests a la \autoref{tab:metode_si_no}.
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.4}
+	\begin{tabular}{|l|l|rr|}
+		\cline{2-4}
+		\multicolumn{1}{c|}{}
+		& Mètode & Error entrenament & Error validació \\
+		\hline
+		\multirow{2}{*}{Lineals}
+		& Regressió logística & 19,80 \% & 19,79 \% \\
+		& LDA & 19,00 \% & 20,33 \% \\
+		\hline
+		\multirow{3}{*}{No Lineals}
+		& Xarxes neuronals & 2,11 \% & 16,52 \% \\
+		& SVM Lineal & 18,60 \% & 19,76 \% \\
+		& \textbf{SVM Radia}l & \textbf{1,80} \% & \textbf{13,14} \% \\
+		\hline
+	\end{tabular}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Mètode utilitzat i errors d'entrenament i validació obtinguts per a decidir si hi ha una expressió facial o no.}
+	\label{tab:metode_si_no}
+\end{table}
+
+Pel que finalment s'escull utilitzar una Màquina de Vectors Suport Radial per aquest problema de classificació.
+
+\subsection{Detecció de tipus d'expressió}
+
+Un cop vistos tots els models es pot veure un resum de l'error d'aquests a la \autoref{tab:metode_k}.
+
+\begin{table}[H]
+	\centering
+	\def\arraystretch{1.4}
+	\begin{tabular}{|l|l|rr|}
+		\cline{2-4}
+		\multicolumn{1}{c|}{}
+		& Mètode & Error entrenament & Error validació \\
+		\hline
+		\multirow{2}{*}{Lineals}
+		& LDA & 15,46 \% & 13,64 \% \\
+		& QDA & 34,94 & 39,00 \% \\
+		\hline
+		\multirow{3}{*}{No Lineals}
+		& Xarxes neuronals & \textbf{3,03} \% & 21,73 \% \\
+		& SVM Lineal & 18,10 \% & 23,92 \% \\
+		& \textbf{SVM Radia}l & 3,13 \% & \textbf{17,47} \% \\
+		\hline
+	\end{tabular}
+	\captionsetup{width=0.8\textwidth}
+	\caption{Mètode utilitzat i errors d'entrenament i validació obtinguts per a la classificació de tipus d'expressió facial.}
+	\label{tab:metode_k}
+\end{table}
+
+Es pot observar que les xarxes neuronals en aquest cas tenen un error d'entrenament inferior al de la màquina de vectors suport. Tot i així l'error de validació és clarament inferior a la SVM radial pel que finalment s'escull utilitzar una Màquina de Vectors Suport Radial per aquest problema de classificació.
+
+\newpage
 \section{Conclusions}
+
+Donat que s'han pogut obtenir errors relativament petits de classificació es pot concloure que les dades són viables per a ser classificades. Tot i així s'han obtingut millors resultats mitjançant mètodes no lineals que amb els que sí que ho són. 
+
+A part, també s'ha pogut veure com utilitzar un sol individu per a entrenar el mètode usat no és una bona idea ja que al intentar classificar utilitzant dades desconegudes llavors els resultats són força dolents. Donat aquest problema s'ha vist com utilitzar un subconjunt aleatori del total de dades ha estat un mètode eficaç per solucionar-lo. També s'ha usat en alguns casos \emph{Cross-Valdiation} per poder obtenir l'error de les dades tot i que no ha estat possible usar-lo sempre ja que a nivell computacional és força costós i les rutines que usaven aquest mètode a vegades trigaven 2 dies a retornar resultats, pel que al final només en certs casos, explicats al treball, s'ha usat CV com a mètode de validació de les dades. 
+
 \section{Possibles extensions}
+
+Tenint en compte que s'ha descartat la variable temps a l'inici de l'estudi utilitzar-la seria una extensió a fer. La gran majoria d'aquestes expressions van acompanyades de moviment i això facilitaria en gran manera la classificació. Precisament aquest factor és el que s'ha tingut en compte a l'estudi del qual s'han extret les dades per aquest treball i s'han aconseguit millors resultats que els del treball. 
+
 \section{Referències}
 
 \bibliographystyle{acm}
