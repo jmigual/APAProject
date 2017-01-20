@@ -3,15 +3,6 @@ rm(list=ls())
 library(MASS)
 source("./R/readAllData.R")
 
-checkError = function(predicted, real, type) {
-  tab = table(predicted, real)
-  print(paste("Error", type))
-  print(tab)
-  
-  error = 100 - (sum(diag(tab)))/length(predicted) * 100
-  print(error)
-}
-
 #######################
 # INICI DE L'EXECUCIO #
 #######################
